@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>SH Pulse</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#c9a84c;--gold2:#e8c96a;--gold-dim:rgba(201,168,76,0.12);
+  --cyan:#00d4ff;--purple:#a855f7;--green:#10b981;--red:#ef4444;--amber:#f59e0b;
+  --bg:#07080f;--card:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.07);--text:#f0f0f0;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{display:flex;justify-content:center;min-height:100vh}
+#app{width:100%;max-width:420px;min-height:100vh;padding:0 0 44px;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse at 50% -5%,rgba(201,168,76,0.07) 0%,transparent 55%),linear-gradient(180deg,#07080f 0%,#0b0d18 100%)}
+#ambient{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:420px;height:420px;border-radius:50%;pointer-events:none;transition:background .8s ease;z-index:0}
+
+/* ── TOPBAR ── */
+#topbar{width:100%;padding:13px 18px 12px;display:flex;justify-content:space-between;align-items:center;z-index:10;position:relative;
+  border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(7,8,15,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+#logo-wrap{display:flex;align-items:center;gap:10px}
+#logo-badge{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#c9a84c,#7a5010);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(201,168,76,0.22)}
+#logo-badge span{font-size:12.5px;font-weight:900;color:#07080f;letter-spacing:-0.5px}
+#brand-wrap{display:flex;flex-direction:column;line-height:1}
+#brand-main{font-size:15px;font-weight:700;color:#f0f0f0;letter-spacing:0.3px}
+#brand-sub{font-size:8px;font-weight:600;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+#lang-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:5px 9px;color:#94a3b8;cursor:pointer;display:flex;align-items:center;gap:5px;font-size:11px;font-family:'Inter',inherit;transition:all .2s}
+#lang-btn:hover{border-color:rgba(201,168,76,0.3)}
+#lang-btn span{color:#fff;font-weight:500}
+#lang-dropdown{position:absolute;right:0;top:calc(100% + 6px);background:#0f1120;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:5px;z-index:300;min-width:148px;max-height:270px;overflow-y:auto;box-shadow:0 20px 40px rgba(0,0,0,.8);display:none}
+#lang-dropdown.open{display:block}
+.lang-opt{display:block;width:100%;text-align:left;padding:7px 11px;border:none;background:transparent;color:rgba(255,255,255,.5);cursor:pointer;border-radius:7px;font-size:12.5px;font-family:'Inter',inherit;transition:all .15s}
+.lang-opt:hover{background:rgba(255,255,255,.06);color:#fff}
+.lang-opt.active{background:var(--gold-dim);color:var(--gold2);font-weight:600}
+
+/* ── GAUGE ── */
+#gauge-section{width:100%;display:flex;flex-direction:column;align-items:center;padding:10px 20px 0;z-index:1}
+#gauge-wrap{width:100%;max-width:310px}
+svg#gauge{width:100%;display:block;overflow:visible}
+
+/* ── TIMER ── */
+#timer-wrap{width:calc(100% - 40px);max-width:270px;display:flex;align-items:center;gap:10px;z-index:1;margin:3px 0 4px}
+#timer-bar{flex:1;height:2px;background:rgba(255,255,255,.04);border-radius:1px;overflow:hidden}
+#timer-fill{height:100%;border-radius:1px;width:0%;transition:background .4s}
+#timer-lbl{font-size:11px;color:#2a3040;font-weight:600;min-width:26px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ── STATUS ── */
+#status{font-size:11px;text-align:center;margin:0 0 14px;min-height:16px;letter-spacing:.8px;font-weight:600;transition:color .4s;display:flex;align-items:center;justify-content:center;gap:6px;z-index:1;text-transform:uppercase}
+#status.pulse{animation:pulseFade 1.4s ease-in-out infinite}
+
+/* ── WARN ── */
+#warn-box{width:calc(100% - 40px);background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.22);border-radius:12px;padding:10px 14px;margin-bottom:14px;z-index:1;display:none;align-items:flex-start;gap:9px}
+#warn-box.show{display:flex}
+
+/* ══════════════════════════════════════
+   PRIMARY METRICS — DL + UL (BIG)
+══════════════════════════════════════ */
+.divider{width:calc(100% - 40px);height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.12),transparent);z-index:1}
+#primary-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:calc(100% - 40px);margin:14px 0 0;z-index:1}
+
+.pcard{border-radius:18px;padding:18px 12px 14px;text-align:center;transition:all .4s;position:relative;overflow:hidden;background:var(--card);border:1px solid var(--border)}
+.pcard.active{background:rgba(255,255,255,0.045)}
+.pcard-glow{position:absolute;inset:0;pointer-events:none;transition:opacity .4s;opacity:0}
+.pcard.active .pcard-glow{opacity:1}
+.pcard-icon-wrap{width:34px;height:34px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);transition:all .3s}
+.pcard-label{font-size:9px;color:#3a4558;margin-bottom:6px;letter-spacing:1.2px;text-transform:uppercase;font-weight:700}
+.pcard-value{font-size:36px;font-weight:800;font-family:'Inter',monospace;transition:color .25s;min-height:44px;display:flex;align-items:center;justify-content:center;color:#1a2030;letter-spacing:-2px;line-height:1}
+.pcard-unit{font-size:10px;color:#2d3748;margin-top:4px;letter-spacing:.5px;font-weight:600}
+
+/* ══════════════════════════════════════
+   SECONDARY METRICS — Ping + Jitter (small)
+══════════════════════════════════════ */
+#secondary-row{display:flex;gap:8px;width:calc(100% - 40px);margin:10px 0 20px;z-index:1}
+.scard{flex:1;border-radius:12px;padding:10px 8px 8px;text-align:center;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);transition:all .4s;position:relative;overflow:hidden}
+.scard.active{background:rgba(255,255,255,.04)}
+.scard-glow{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s}
+.scard.active .scard-glow{opacity:1}
+/* Tooltip-style label */
+.scard-row{display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:3px}
+.scard-label{font-size:8.5px;color:#2d3748;letter-spacing:.8px;text-transform:uppercase;font-weight:700}
+.scard-help{width:13px;height:13px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:help;flex-shrink:0;position:relative}
+.scard-help span{font-size:7.5px;color:#3a4558;font-weight:700;line-height:1}
+/* Tooltip */
+.tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0f1120;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 11px;width:180px;font-size:10.5px;color:#94a3b8;line-height:1.5;z-index:100;display:none;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.6);text-align:left}
+.tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#0f1120}
+.scard-help:hover .tooltip{display:block}
+.scard-value{font-size:18px;font-weight:700;font-family:'Inter',monospace;transition:color .25s;min-height:24px;display:flex;align-items:center;justify-content:center;color:#1a2030;letter-spacing:-.5px}
+.scard-unit{font-size:8.5px;color:#1e2535;margin-top:2px;letter-spacing:.5px;font-weight:500}
+
+/* ── BUTTON ── */
+#btn-wrap{z-index:1;display:flex;justify-content:center;width:100%}
+#start-btn{border:none;border-radius:50px;padding:15px 52px;color:#07080f;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:10px;letter-spacing:.6px;transition:transform .2s,box-shadow .2s;font-family:'Inter',inherit;text-transform:uppercase;background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 8px 28px rgba(201,168,76,0.28),0 2px 8px rgba(0,0,0,.4)}
+#start-btn:hover{transform:scale(1.04);box-shadow:0 12px 36px rgba(201,168,76,0.42)}
+#start-btn:active{transform:scale(.97)}
+#spinner{display:none;flex-direction:column;align-items:center;gap:10px}
+#spinner-ring{width:44px;height:44px;border-radius:50%;border:2.5px solid rgba(255,255,255,.06);animation:spin .75s linear infinite}
+#spinner-src{font-size:9.5px;color:#2a3040;letter-spacing:1.2px;text-transform:uppercase;font-weight:600}
+
+/* ── QUALITY ── */
+#quality{margin-top:16px;padding:8px 20px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:30px;z-index:1;display:none;align-items:center;gap:8px;font-size:12.5px}
+#quality.show{display:flex}
+#quality-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+#quality-text{color:#4a5568;font-weight:600;letter-spacing:.3px}
+
+/* ══════════════════════════════════════
+   HISTORY
+══════════════════════════════════════ */
+#history-section{width:calc(100% - 40px);z-index:1;margin-top:30px}
+#history-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+#history-title{font-size:9.5px;font-weight:700;color:#2d3a50;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:7px}
+#clear-btn{font-size:10px;color:#2a3040;background:none;border:none;cursor:pointer;font-family:'Inter',inherit;letter-spacing:.5px;font-weight:500;padding:4px 8px;border-radius:6px;transition:color .2s}
+#clear-btn:hover{color:#ef4444}
+
+/* Current — hero */
+#current-result{width:100%;border-radius:18px;padding:16px 16px 13px;background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,0.2);margin-bottom:12px;display:none;position:relative;overflow:hidden;animation:fadeUp .4s ease}
+#current-result.show{display:block}
+#current-result::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.08) 0%,transparent 65%);pointer-events:none}
+#cr-label{font-size:8px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+#cr-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:glow-pulse 2s ease-in-out infinite;flex-shrink:0}
+
+/* Primary row in hero */
+#cr-primary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.cr-p-card{background:rgba(255,255,255,.03);border-radius:12px;padding:12px 8px 9px;text-align:center}
+.cr-p-val{font-size:26px;font-weight:800;font-family:'Inter',monospace;letter-spacing:-1px;line-height:1}
+.cr-p-lbl{font-size:8px;color:#2d3748;letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-top:3px}
+.cr-p-unit{font-size:8.5px;color:#1e2535;margin-top:1px}
+
+/* Secondary row in hero */
+#cr-secondary{display:flex;gap:8px;padding-top:9px;border-top:1px solid rgba(255,255,255,.04)}
+.cr-s{flex:1;text-align:center}
+.cr-s-val{font-size:14px;font-weight:700;font-family:'Inter',monospace;letter-spacing:-.3px}
+.cr-s-lbl{font-size:7.5px;color:#1e2535;letter-spacing:.7px;text-transform:uppercase;font-weight:600;margin-top:2px}
+.cr-s-unit{font-size:7.5px;color:#141c28;margin-top:1px}
+
+#cr-footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+#cr-quality-badge{font-size:11px;font-weight:600;letter-spacing:.2px}
+#cr-datetime{font-size:9px;color:#1e2535;font-weight:500}
+
+/* Past history items */
+#history-list{display:flex;flex-direction:column;gap:7px}
+.hist-item{width:100%;border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:10px;transition:border-color .2s}
+.hist-item:hover{border-color:rgba(255,255,255,.09)}
+.hist-num{font-size:9px;color:#1e2535;font-weight:700;min-width:16px;text-align:center}
+.hist-bar{width:3px;height:30px;border-radius:2px;flex-shrink:0}
+/* Primary values big in history too */
+.hist-primary{display:flex;gap:12px;flex:1;align-items:center}
+.hist-p{text-align:center}
+.hist-p-v{font-size:15px;font-weight:700;font-family:'Inter',monospace;letter-spacing:-.5px}
+.hist-p-l{font-size:7px;color:#1e2535;letter-spacing:.6px;text-transform:uppercase;font-weight:600;margin-top:1px}
+.hist-sep{width:1px;height:22px;background:rgba(255,255,255,.05);flex-shrink:0}
+/* Secondary small */
+.hist-secondary{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
+.hist-s{display:flex;gap:4px;align-items:baseline}
+.hist-s-v{font-size:10px;font-weight:600;font-family:'Inter',monospace;color:#2d3748}
+.hist-s-l{font-size:7px;color:#1e2535;letter-spacing:.4px;text-transform:uppercase}
+.hist-date{font-size:9px;color:#1a2030;font-weight:500;text-align:right;min-width:42px;line-height:1.4;white-space:pre}
+.hist-empty{text-align:center;padding:22px;font-size:11.5px;color:#1e2535;letter-spacing:.3px}
+
+/* ── FOOTER ── */
+#footer{margin-top:26px;z-index:1;text-align:center}
+#footer-brand{font-size:9px;color:#1a2030;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+#footer-research{font-size:8px;color:#111722;letter-spacing:.5px;margin-top:3px}
+
+.wifi-arc{transition:stroke .4s,opacity .4s;stroke-linecap:round;fill:none;stroke-width:2}
+.wifi-dot{transition:fill .4s}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulseFade{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow-pulse{0%,100%{box-shadow:0 0 4px var(--gold)}50%{box-shadow:0 0 10px var(--gold)}}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+@media(max-width:370px){.pcard-value{font-size:30px}.cr-p-val{font-size:22px}}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="ambient"></div>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div id="logo-wrap">
+    <div id="logo-badge"><span>SH</span></div>
+    <div id="brand-wrap">
+      <span id="brand-main">Pulse</span>
+      <span id="brand-sub">Speed Test</span>
+    </div>
+  </div>
+  <div style="position:relative">
+    <button id="lang-btn">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span id="lang-name">Català</span>
+      <svg id="chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div id="lang-dropdown"></div>
+  </div>
+</div>
+
+<!-- GAUGE -->
+<div id="gauge-section">
+<div id="gauge-wrap">
+  <svg id="gauge" viewBox="0 0 300 248">
+    <defs>
+      <filter id="gf" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="6" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="gwide" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="14" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <radialGradient id="hub-g" cx="35%" cy="30%">
+        <stop offset="0%" stop-color="#e8c96a"/>
+        <stop offset="100%" stop-color="#6b4510"/>
+      </radialGradient>
+    </defs>
+    <circle cx="150" cy="146" r="120" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+    <circle cx="150" cy="146" r="114" fill="none" stroke="rgba(255,255,255,0.035)" stroke-width=".5"/>
+    <path id="g-track" fill="none" stroke="#0d0f1c" stroke-width="13" stroke-linecap="round"/>
+    <path id="g-wide" fill="none" stroke-width="26" stroke-linecap="round" opacity=".18" filter="url(#gwide)"/>
+    <path id="g-fill" fill="none" stroke-width="13" stroke-linecap="round" filter="url(#gf)"/>
+    <g id="ticks-g"></g>
+    <g id="needle" style="transform-box:view-box">
+      <polygon points="224,146 140,143 140,149" fill="rgba(0,0,0,.45)" transform="translate(3,3)"/>
+      <polygon id="needle-body" points="224,146 140,141 140,151"/>
+      <polygon points="224,146 150,144.5 190,145.5" fill="rgba(255,255,255,.22)"/>
+    </g>
+    <circle cx="150" cy="146" r="21" fill="rgba(7,8,15,.95)" stroke="rgba(201,168,76,0.18)" stroke-width="1"/>
+    <circle cx="150" cy="146" r="15" fill="url(#hub-g)"/>
+    <text x="150" y="150" text-anchor="middle" dominant-baseline="middle"
+      fill="rgba(7,8,15,0.85)" font-size="11" font-weight="900" font-family="'Inter',sans-serif" letter-spacing=".5px">SH</text>
+    <circle cx="150" cy="146" r="3.5" fill="rgba(7,8,15,0.5)"/>
+    <text id="speed-val" x="150" y="198" text-anchor="middle" dominant-baseline="middle"
+      fill="white" font-weight="800" font-family="'Inter',sans-serif" style="letter-spacing:-1.5px">—</text>
+    <text x="150" y="220" text-anchor="middle" fill="rgba(255,255,255,.28)" font-size="9.5" font-family="'Inter',sans-serif" letter-spacing="3px" font-weight="600">MBPS</text>
+    <circle id="dp" cx="136" cy="238" r="2.8" fill="rgba(255,255,255,.08)" style="transition:fill .4s"/>
+    <circle id="dd" cx="150" cy="238" r="2.8" fill="rgba(255,255,255,.08)" style="transition:fill .4s"/>
+    <circle id="du" cx="164" cy="238" r="2.8" fill="rgba(255,255,255,.08)" style="transition:fill .4s"/>
+  </svg>
+</div>
+</div>
+
+<!-- Timer -->
+<div id="timer-wrap">
+  <div id="timer-bar"><div id="timer-fill"></div></div>
+  <span id="timer-lbl"></span>
+</div>
+<div id="status"></div>
+
+<!-- Warn -->
+<div id="warn-box">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  <div><div id="wt" style="font-size:11.5px;color:#fcd34d;font-weight:600;margin-bottom:2px"></div><div id="wm" style="font-size:10.5px;color:rgba(252,211,77,.6)"></div></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ PRIMARY: DL + UL (BIG) ══ -->
+<div id="primary-cards">
+  <div class="pcard" id="card-dl">
+    <div class="pcard-glow" id="glow-dl"></div>
+    <div class="pcard-icon-wrap" id="icon-dl">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2d3748" stroke-width="2.5"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+    </div>
+    <div class="pcard-label" id="lbl-dl">Descàrrega</div>
+    <div class="pcard-value" id="val-dl">—</div>
+    <div class="pcard-unit">Mbps</div>
+  </div>
+  <div class="pcard" id="card-ul">
+    <div class="pcard-glow" id="glow-ul"></div>
+    <div class="pcard-icon-wrap" id="icon-ul">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2d3748" stroke-width="2.5"><polyline points="16 7 12 3 8 7"/><line x1="12" y1="3" x2="12" y2="15"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+    </div>
+    <div class="pcard-label" id="lbl-ul">Pujada</div>
+    <div class="pcard-value" id="val-ul">—</div>
+    <div class="pcard-unit" id="unit-ul">Mbps</div>
+  </div>
+</div>
+
+<!-- ══ SECONDARY: Ping + Jitter (small, with tooltips) ══ -->
+<div id="secondary-row">
+  <div class="scard" id="card-ping">
+    <div class="scard-glow" id="glow-ping"></div>
+    <div class="scard-row">
+      <span class="scard-label" id="lbl-ping">Ping</span>
+      <div class="scard-help"><span>?</span>
+        <div class="tooltip" id="tip-ping">Temps que tarda la senyal a anar al servidor i tornar. &lt;40ms és excel·lent per a videocrides i jocs.</div>
+      </div>
+    </div>
+    <div class="scard-value" id="val-ping">—</div>
+    <div class="scard-unit">ms</div>
+  </div>
+  <div class="scard" id="card-jitter">
+    <div class="scard-glow" id="glow-jitter"></div>
+    <div class="scard-row">
+      <span class="scard-label" id="lbl-jitter">Jitter</span>
+      <div class="scard-help"><span>?</span>
+        <div class="tooltip" id="tip-jitter">Variabilitat del ping. Si és alt, la connexió és inestable: es noten talls en veu i vídeo. &lt;10ms és bo.</div>
+      </div>
+    </div>
+    <div class="scard-value" id="val-jitter">—</div>
+    <div class="scard-unit">ms</div>
+  </div>
+</div>
+
+<!-- Button -->
+<div id="btn-wrap">
+  <button id="start-btn">
+    <svg id="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="#07080f"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    <span id="btn-label">Iniciar Test</span>
+  </button>
+  <div id="spinner">
+    <div id="spinner-ring"></div>
+    <span id="spinner-src">speed.cloudflare.com</span>
+  </div>
+</div>
+<div id="quality"><div id="quality-dot"></div><span id="quality-text"></span></div>
+
+<!-- ══ HISTORY ══ -->
+<div id="history-section">
+  <div id="history-header">
+    <div id="history-title">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 1 .5 4"/><polyline points="3 7 3 11 7 11"/></svg>
+      <span id="lbl-history">Historial</span>
+    </div>
+    <button id="clear-btn">Esborrar</button>
+  </div>
+
+  <!-- Hero current -->
+  <div id="current-result">
+    <div id="cr-label"><div id="cr-dot"></div><span id="lbl-current">Resultat actual</span></div>
+    <div id="cr-primary">
+      <div class="cr-p-card">
+        <div class="cr-p-val" id="cr-dl" style="color:var(--cyan)">—</div>
+        <div class="cr-p-lbl" id="cr-lbl-dl">Descàrrega</div>
+        <div class="cr-p-unit">Mbps</div>
+      </div>
+      <div class="cr-p-card">
+        <div class="cr-p-val" id="cr-ul" style="color:var(--purple)">—</div>
+        <div class="cr-p-lbl" id="cr-lbl-ul">Pujada</div>
+        <div class="cr-p-unit">Mbps</div>
+      </div>
+    </div>
+    <div id="cr-secondary">
+      <div class="cr-s">
+        <div class="cr-s-val" id="cr-ping" style="color:var(--gold)">—</div>
+        <div class="cr-s-lbl" id="cr-lbl-ping">Ping</div>
+        <div class="cr-s-unit">ms</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,.05);flex-shrink:0"></div>
+      <div class="cr-s">
+        <div class="cr-s-val" id="cr-jitter" style="color:var(--amber)">—</div>
+        <div class="cr-s-lbl" id="cr-lbl-jitter">Jitter</div>
+        <div class="cr-s-unit">ms</div>
+      </div>
+    </div>
+    <div id="cr-footer">
+      <span id="cr-quality-badge"></span>
+      <span id="cr-datetime"></span>
+    </div>
+  </div>
+
+  <div id="history-list">
+    <div class="hist-empty" id="hist-empty-msg">Cap test realitzat encara</div>
+  </div>
+</div>
+
+<div id="footer">
+  <div id="footer-brand">SH Solucions · SH Pulse</div>
+  <div id="footer-research">Metodologia Ookla · Cloudflare · RFC 6349</div>
+</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// GAUGE
+// ══════════════════════════════════════════════════════════
+const CX=150,CY=146,R=100,START=140,SWEEP=260,MAX=500;
+const CIRC=2*Math.PI*R,ARC=CIRC*SWEEP/360;
+const rad=d=>d*Math.PI/180;
+const pt=(a,r=R)=>[+(CX+r*Math.cos(rad(a))).toFixed(2),+(CY+r*Math.sin(rad(a))).toFixed(2)];
+const[sx,sy]=pt(START),[ex,ey]=pt(START+SWEEP);
+const D=`M${sx},${sy} A${R},${R} 0 1,1 ${ex},${ey}`;
+const gTrack=document.getElementById('g-track'),gFill=document.getElementById('g-fill'),gWide=document.getElementById('g-wide');
+[gTrack,gFill,gWide].forEach(e=>e.setAttribute('d',D));
+gFill.setAttribute('stroke-dasharray',`${ARC} ${CIRC}`);gFill.setAttribute('stroke-dashoffset',ARC);
+gWide.setAttribute('stroke-dasharray',`${ARC} ${CIRC}`);gWide.setAttribute('stroke-dashoffset',ARC);
+const tG=document.getElementById('ticks-g');
+[0,100,200,300,400,500].forEach(v=>{
+  const a=START+(v/MAX)*SWEEP,[ox,oy]=pt(a,R+5),[ix,iy]=pt(a,R-5),[lx,ly]=pt(a,R+19);
+  tG.innerHTML+=`<line x1="${ox}" y1="${oy}" x2="${ix}" y2="${iy}" stroke="rgba(255,255,255,.14)" stroke-width="${v%200===0?2:1.2}"/>
+  <text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" fill="rgba(255,255,255,.22)" font-size="7.5" font-family="Inter,monospace" font-weight="500">${v}</text>`;
+});
+[50,150,250,350,450].forEach(v=>{
+  const a=START+(v/MAX)*SWEEP,[ox,oy]=pt(a,R+3.5),[ix,iy]=pt(a,R-3.5);
+  tG.innerHTML+=`<line x1="${ox}" y1="${oy}" x2="${ix}" y2="${iy}" stroke="rgba(255,255,255,.06)" stroke-width="1"/>`;
+});
+const needleEl=document.getElementById('needle');
+needleEl.style.transformOrigin=`${CX}px ${CY}px`;
+const speedTxt=document.getElementById('speed-val');
+let _cur=0,_tgt=0,_col='#c9a84c',_raf=null;
+function setTarget(s,c){_tgt=Math.max(0,s);_col=c;if(!_raf)_raf=requestAnimationFrame(_step);}
+function _step(){const d=_tgt-_cur;_cur+=d*0.16;if(Math.abs(d)<0.04){_cur=_tgt;_render(_cur,_col);_raf=null;return;}_render(_cur,_col);_raf=requestAnimationFrame(_step);}
+function _render(s,c){
+  const f=Math.min(Math.max(s/MAX,0),1),off=ARC*(1-f);
+  gFill.setAttribute('stroke-dashoffset',off);gFill.setAttribute('stroke',c);
+  gWide.setAttribute('stroke-dashoffset',off);gWide.setAttribute('stroke',c);
+  needleEl.style.transform=`rotate(${START+f*SWEEP}deg)`;
+  document.getElementById('needle-body').setAttribute('fill',c);
+  speedTxt.textContent=s<0.5?'—':s<10?s.toFixed(1):Math.round(s).toString();
+  speedTxt.setAttribute('font-size',s>99?'38':'42');
+}
+_render(0,'#c9a84c');
+
+// Timer
+const timerFill=document.getElementById('timer-fill'),timerLbl=document.getElementById('timer-lbl');
+let timerIv=null;
+function startTimer(c,ms=10000){clearInterval(timerIv);timerFill.style.transition='none';timerFill.style.width='0%';timerFill.style.background=c;timerFill.offsetHeight;let el=0;timerIv=setInterval(()=>{el+=100;timerFill.style.transition='width 100ms linear';timerFill.style.width=Math.min(el/ms*100,100)+'%';const r=Math.max(0,Math.ceil((ms-el)/1000));timerLbl.textContent=r>0?r+'s':'';},100);}
+function stopTimer(){clearInterval(timerIv);timerFill.style.transition='width .4s ease';timerFill.style.width='0%';timerLbl.textContent='';}
+
+// ══════════════════════════════════════════════════════════
+// LANGUAGES
+// ══════════════════════════════════════════════════════════
+const LANGS={ca:"Català",es:"Español",en:"English",fr:"Français",de:"Deutsch",it:"Italiano",pt:"Português",nl:"Nederlands",pl:"Polski",sv:"Svenska",ro:"Română",el:"Ελληνικά"};
+const TIPS={
+  ping:{
+    ca:"Temps que tarda la senyal a anar al servidor i tornar. <40ms excel·lent per a videocrides i jocs.",
+    es:"Tiempo que tarda la señal en ir al servidor y volver. <40ms excelente para videollamadas y juegos.",
+    en:"Time for a signal to travel to the server and back. <40ms excellent for video calls & gaming.",
+    fr:"Temps pour un signal d'aller au serveur et revenir. <40ms excellent pour appels vidéo et jeux.",
+    de:"Zeit, die ein Signal braucht, um zum Server und zurück zu reisen. <40ms ausgezeichnet.",
+    it:"Tempo per un segnale di andare al server e tornare. <40ms ottimo per videochiamate e giochi.",
+    pt:"Tempo para um sinal ir ao servidor e voltar. <40ms excelente para videochamadas e jogos.",
+    nl:"Tijd voor een signaal om naar de server en terug te gaan. <40ms uitstekend.",
+    pl:"Czas podróży sygnału do serwera i z powrotem. <40ms doskonałe.",
+    sv:"Tid för en signal att resa till servern och tillbaka. <40ms utmärkt.",
+    ro:"Timp pentru un semnal să meargă la server și înapoi. <40ms excelent.",
+    el:"Χρόνος μετάδοσης σήματος στον διακομιστή και πίσω. <40ms εξαιρετικό."
+  },
+  jitter:{
+    ca:"Variabilitat del ping. Si és alt, la connexió és inestable: es noten talls en veu i vídeo. <10ms és bo.",
+    es:"Variabilidad del ping. Si es alto, la conexión es inestable: se notan cortes en voz y vídeo. <10ms es bueno.",
+    en:"Ping variability. High jitter means unstable connection — causes voice/video glitches. <10ms is good.",
+    fr:"Variabilité du ping. Si élevé, connexion instable — coupures voix/vidéo. <10ms est bien.",
+    de:"Ping-Variabilität. Hoher Jitter = instabile Verbindung — Sprach-/Videostörungen. <10ms ist gut.",
+    it:"Variabilità del ping. Alto jitter = connessione instabile. <10ms è buono.",
+    pt:"Variabilidade do ping. Jitter alto = conexão instável. <10ms é bom.",
+    nl:"Ping-variabiliteit. Hoge jitter = instabiele verbinding. <10ms is goed.",
+    pl:"Zmienność pingu. Wysoki jitter = niestabilne połączenie. <10ms jest dobre.",
+    sv:"Pingvariabilitet. Hög jitter = instabil anslutning. <10ms är bra.",
+    ro:"Variabilitatea ping-ului. Jitter mare = conexiune instabilă. <10ms este bun.",
+    el:"Μεταβλητότητα ping. Υψηλό jitter = ασταθής σύνδεση. <10ms είναι καλό."
+  }
+};
+const T={
+  ca:{dl:"Descàrrega",ul:"Pujada",ping:"Ping",jitter:"Jitter",start:"Iniciar Test",again:"Repetir Test",pp:"Mesurant ping i jitter...",pd:"Mesurant descàrrega...",pu:"Mesurant pujada...",done:"Test completat",idle:"Prem per iniciar el test",ulwarn:"Pujada no disponible en sandbox",ulwarnmsg:"Funciona al 100% allotjat a Netlify / GitHub Pages.",hi:"Excel·lent 🚀",ok:"Correcte ✅",lo:"Lent ⚠️",history:"Historial",current:"Resultat actual",clear:"Esborrar",empty:"Cap test realitzat encara",today:"Avui",yesterday:"Ahir"},
+  es:{dl:"Descarga",ul:"Subida",ping:"Ping",jitter:"Jitter",start:"Iniciar Test",again:"Repetir",pp:"Midiendo ping y jitter...",pd:"Midiendo descarga...",pu:"Midiendo subida...",done:"Test completado",idle:"Pulsa para iniciar",ulwarn:"Subida no disponible en sandbox",ulwarnmsg:"Funciona al 100% en Netlify / GitHub Pages.",hi:"Excelente 🚀",ok:"Correcto ✅",lo:"Lento ⚠️",history:"Historial",current:"Resultado actual",clear:"Borrar",empty:"Sin pruebas aún",today:"Hoy",yesterday:"Ayer"},
+  en:{dl:"Download",ul:"Upload",ping:"Ping",jitter:"Jitter",start:"Start Test",again:"Run Again",pp:"Measuring ping & jitter...",pd:"Measuring download...",pu:"Measuring upload...",done:"Test complete",idle:"Press to start",ulwarn:"Upload unavailable in sandbox",ulwarnmsg:"Works 100% on Netlify / GitHub Pages.",hi:"Excellent 🚀",ok:"Good ✅",lo:"Slow ⚠️",history:"History",current:"Current result",clear:"Clear",empty:"No tests yet",today:"Today",yesterday:"Yesterday"},
+  fr:{dl:"Téléchargement",ul:"Upload",ping:"Ping",jitter:"Gigue",start:"Démarrer",again:"Relancer",pp:"Mesure ping et gigue...",pd:"Mesure téléchargement...",pu:"Mesure upload...",done:"Test terminé",idle:"Appuyez pour démarrer",ulwarn:"Upload indisponible",ulwarnmsg:"Fonctionne à 100% sur Netlify / GitHub Pages.",hi:"Excellent 🚀",ok:"Bon ✅",lo:"Lent ⚠️",history:"Historique",current:"Résultat actuel",clear:"Effacer",empty:"Aucun test effectué",today:"Aujourd'hui",yesterday:"Hier"},
+  de:{dl:"Download",ul:"Upload",ping:"Ping",jitter:"Jitter",start:"Starten",again:"Wiederholen",pp:"Ping & Jitter messen...",pd:"Download messen...",pu:"Upload messen...",done:"Abgeschlossen",idle:"Zum Starten drücken",ulwarn:"Upload im Sandbox nicht verfügbar",ulwarnmsg:"Funktioniert 100% auf Netlify / GitHub Pages.",hi:"Ausgezeichnet 🚀",ok:"Gut ✅",lo:"Langsam ⚠️",history:"Verlauf",current:"Aktuelles Ergebnis",clear:"Löschen",empty:"Noch keine Tests",today:"Heute",yesterday:"Gestern"},
+  it:{dl:"Download",ul:"Upload",ping:"Latenza",jitter:"Jitter",start:"Inizia",again:"Ripeti",pp:"Misurazione ping e jitter...",pd:"Misurazione download...",pu:"Misurazione upload...",done:"Completato",idle:"Premi per iniziare",ulwarn:"Upload non disponibile in sandbox",ulwarnmsg:"Funziona al 100% su Netlify / GitHub Pages.",hi:"Eccellente 🚀",ok:"Buono ✅",lo:"Lento ⚠️",history:"Cronologia",current:"Risultato attuale",clear:"Cancella",empty:"Nessun test",today:"Oggi",yesterday:"Ieri"},
+  pt:{dl:"Download",ul:"Upload",ping:"Latência",jitter:"Jitter",start:"Iniciar",again:"Repetir",pp:"Medindo ping e jitter...",pd:"Medindo download...",pu:"Medindo upload...",done:"Concluído",idle:"Prima para iniciar",ulwarn:"Upload indisponível",ulwarnmsg:"Funciona a 100% no Netlify / GitHub Pages.",hi:"Excelente 🚀",ok:"Bom ✅",lo:"Lento ⚠️",history:"Histórico",current:"Resultado atual",clear:"Limpar",empty:"Sem testes",today:"Hoje",yesterday:"Ontem"},
+  nl:{dl:"Download",ul:"Upload",ping:"Ping",jitter:"Jitter",start:"Starten",again:"Opnieuw",pp:"Ping & jitter meten...",pd:"Download meten...",pu:"Upload meten...",done:"Voltooid",idle:"Druk om te starten",ulwarn:"Upload niet beschikbaar",ulwarnmsg:"Werkt 100% op Netlify / GitHub Pages.",hi:"Uitstekend 🚀",ok:"Goed ✅",lo:"Traag ⚠️",history:"Geschiedenis",current:"Huidig resultaat",clear:"Wissen",empty:"Nog geen tests",today:"Vandaag",yesterday:"Gisteren"},
+  pl:{dl:"Pobieranie",ul:"Wysyłanie",ping:"Ping",jitter:"Jitter",start:"Rozpocznij",again:"Powtórz",pp:"Pomiar pingu i jittera...",pd:"Pomiar pobierania...",pu:"Pomiar wysyłania...",done:"Zakończony",idle:"Naciśnij, aby rozpocząć",ulwarn:"Wysyłanie niedostępne",ulwarnmsg:"Działa 100% na Netlify / GitHub Pages.",hi:"Doskonałe 🚀",ok:"Dobre ✅",lo:"Wolne ⚠️",history:"Historia",current:"Bieżący wynik",clear:"Wyczyść",empty:"Brak testów",today:"Dziś",yesterday:"Wczoraj"},
+  sv:{dl:"Nedladdning",ul:"Uppladdning",ping:"Ping",jitter:"Jitter",start:"Starta",again:"Kör igen",pp:"Mäter ping & jitter...",pd:"Mäter nedladdning...",pu:"Mäter uppladdning...",done:"Slutfört",idle:"Tryck för att starta",ulwarn:"Uppladdning ej tillgänglig",ulwarnmsg:"Fungerar 100% på Netlify / GitHub Pages.",hi:"Utmärkt 🚀",ok:"Bra ✅",lo:"Långsam ⚠️",history:"Historik",current:"Aktuellt resultat",clear:"Rensa",empty:"Inga tester",today:"Idag",yesterday:"Igår"},
+  ro:{dl:"Descărcare",ul:"Încărcare",ping:"Latență",jitter:"Jitter",start:"Pornește",again:"Repetă",pp:"Măsurare ping și jitter...",pd:"Măsurare descărcare...",pu:"Măsurare încărcare...",done:"Finalizat",idle:"Apasă pentru a începe",ulwarn:"Încărcare indisponibilă",ulwarnmsg:"Funcționează 100% pe Netlify / GitHub Pages.",hi:"Excelent 🚀",ok:"Bun ✅",lo:"Lent ⚠️",history:"Istoric",current:"Rezultat curent",clear:"Șterge",empty:"Niciun test",today:"Azi",yesterday:"Ieri"},
+  el:{dl:"Λήψη",ul:"Αποστολή",ping:"Ping",jitter:"Jitter",start:"Έναρξη",again:"Επανάληψη",pp:"Μέτρηση ping & jitter...",pd:"Μέτρηση λήψης...",pu:"Μέτρηση αποστολής...",done:"Ολοκληρώθηκε",idle:"Πατήστε για έναρξη",ulwarn:"Αποστολή μη διαθέσιμη",ulwarnmsg:"Λειτουργεί 100% σε Netlify / GitHub Pages.",hi:"Εξαιρετικό 🚀",ok:"Καλό ✅",lo:"Αργό ⚠️",history:"Ιστορικό",current:"Τρέχον αποτέλεσμα",clear:"Εκκαθάριση",empty:"Δεν έχουν γίνει τεστ",today:"Σήμερα",yesterday:"Χθες"},
+};
+const PC={idle:'#c9a84c',ping:'#c9a84c',jitter:'#f59e0b',download:'#00d4ff',upload:'#a855f7',done:'#10b981'};
+let lang='ca',phase='idle',busy=false;
+
+function applyLang(l){
+  lang=l;const t=T[l];document.documentElement.lang=l;
+  document.getElementById('lang-name').textContent=LANGS[l];
+  document.getElementById('lbl-dl').textContent=t.dl;
+  document.getElementById('lbl-ul').textContent=t.ul;
+  document.getElementById('lbl-ping').textContent=t.ping;
+  document.getElementById('lbl-jitter').textContent=t.jitter;
+  document.getElementById('lbl-history').textContent=t.history;
+  document.getElementById('lbl-current').textContent=t.current;
+  document.getElementById('clear-btn').textContent=t.clear;
+  document.getElementById('cr-lbl-dl').textContent=t.dl;
+  document.getElementById('cr-lbl-ul').textContent=t.ul;
+  document.getElementById('cr-lbl-ping').textContent=t.ping;
+  document.getElementById('cr-lbl-jitter').textContent=t.jitter;
+  document.getElementById('hist-empty-msg').textContent=t.empty;
+  // Update tooltips
+  document.getElementById('tip-ping').textContent=TIPS.ping[l]||TIPS.ping.en;
+  document.getElementById('tip-jitter').textContent=TIPS.jitter[l]||TIPS.jitter.en;
+  document.querySelectorAll('.lang-opt').forEach(b=>b.classList.toggle('active',b.dataset.code===l));
+  if(phase==='idle')setStatus(t.idle,'rgba(255,255,255,0.18)',false);
+  updateBtn();renderHistory();
+}
+const ddEl=document.getElementById('lang-dropdown');
+Object.entries(LANGS).forEach(([code,name])=>{
+  const b=document.createElement('button');b.className='lang-opt'+(code==='ca'?' active':'');
+  b.dataset.code=code;b.textContent=name;
+  b.onclick=()=>{applyLang(code);ddEl.classList.remove('open');document.getElementById('chevron').style.transform='';};
+  ddEl.appendChild(b);
+});
+document.getElementById('lang-btn').onclick=e=>{e.stopPropagation();ddEl.classList.toggle('open');document.getElementById('chevron').style.transform=ddEl.classList.contains('open')?'rotate(180deg)':'';};
+document.addEventListener('click',()=>{ddEl.classList.remove('open');document.getElementById('chevron').style.transform='';});
+
+// ══════════════════════════════════════════════════════════
+// UI
+// ══════════════════════════════════════════════════════════
+function setStatus(txt,c,pulse){const el=document.getElementById('status');el.textContent=txt;el.style.color=c;el.className=pulse?'pulse':'';}
+function setAmbient(c){document.getElementById('ambient').style.background=`radial-gradient(circle,${c}10 0%,transparent 62%)`;}
+function activatePrimary(n){
+  [['dl','download'],['ul','upload']].forEach(([k,cn])=>{
+    const on=n===cn,card=document.getElementById('card-'+k);
+    card.classList.toggle('active',on);card.style.border=on?`1px solid ${PC[cn]}45`:'1px solid var(--border)';
+    if(on)document.getElementById('glow-'+k).style.cssText=`background:radial-gradient(ellipse at 50% 0%,${PC[cn]}18 0%,transparent 70%);opacity:1`;
+    else document.getElementById('glow-'+k).style.opacity='0';
+    document.getElementById('icon-'+k).querySelector('svg').style.stroke=on?PC[cn]:'#2d3748';
+  });
+  [['ping','ping'],['jitter','jitter']].forEach(([k,cn])=>{
+    const on=n===cn,card=document.getElementById('card-'+k);
+    card.classList.toggle('active',on);card.style.border=on?`1px solid ${PC[cn]}35`:'1px solid rgba(255,255,255,.05)';
+    if(on)document.getElementById('glow-'+k).style.cssText=`background:radial-gradient(ellipse at 50% 0%,${PC[cn]}12 0%,transparent 70%);opacity:1`;
+    else document.getElementById('glow-'+k).style.opacity='0';
+  });
+}
+function setPV(name,val,c){
+  const m={download:'val-dl',upload:'val-ul',ping:'val-ping',jitter:'val-jitter'};
+  const el=document.getElementById(m[name]);if(!el)return;
+  el.textContent=val;el.style.color=c||(val!=='—'?PC[name]:'#1a2030');
+}
+function setDot(n){const m={ping:'dp',download:'dd',upload:'du'};if(m[n])document.getElementById(m[n]).style.fill=PC[n];}
+function showSpinner(on,c){
+  document.getElementById('start-btn').style.display=on?'none':'flex';
+  document.getElementById('spinner').style.display=on?'flex':'none';
+  if(on){document.getElementById('spinner-ring').style.borderTopColor=c;document.getElementById('spinner-ring').style.boxShadow=`0 0 16px ${c}35`;}
+}
+function updateBtn(){
+  document.getElementById('btn-label').textContent=phase==='idle'?T[lang].start:T[lang].again;
+  const ico=document.getElementById('btn-icon');
+  if(phase==='idle'){ico.innerHTML='<polygon points="5 3 19 12 5 21 5 3"/>';ico.setAttribute('fill','#07080f');ico.removeAttribute('stroke');}
+  else{ico.innerHTML='<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/>';ico.setAttribute('fill','none');ico.setAttribute('stroke','#07080f');ico.setAttribute('stroke-width','2');}
+}
+function fmtSpd(v){return v===null?'N/A':v<10?v.toFixed(1):Math.round(v).toString();}
+function qColor(dl){if(dl===null)return '#4a5568';const v=parseFloat(dl);return v>100?'#10b981':v>25?'#f59e0b':'#ef4444';}
+function qLabel(dl){if(dl===null)return '—';const v=parseFloat(dl);return v>100?T[lang].hi:v>25?T[lang].ok:T[lang].lo;}
+
+// ══════════════════════════════════════════════════════════
+// HISTORY
+// ══════════════════════════════════════════════════════════
+const LS='shpulse_v3';const MH=20;
+function loadH(){try{return JSON.parse(localStorage.getItem(LS)||'[]');}catch{return[];}}
+function saveH(h){try{localStorage.setItem(LS,JSON.stringify(h));}catch{}}
+function addR(r){const h=loadH();h.unshift({...r,ts:Date.now()});if(h.length>MH)h.pop();saveH(h);}
+function fmtDate(ts){
+  const d=new Date(ts),now=new Date();
+  const isToday=d.toDateString()===now.toDateString();
+  const yest=new Date(now);yest.setDate(yest.getDate()-1);
+  const isYest=d.toDateString()===yest.toDateString();
+  const time=d.toTimeString().slice(0,5);
+  if(isToday)return T[lang].today+'\n'+time;
+  if(isYest)return T[lang].yesterday+'\n'+time;
+  return (d.getDate()+'/'+(d.getMonth()+1))+'\n'+time;
+}
+
+function renderHistory(){
+  const h=loadH(),list=document.getElementById('history-list'),empty=document.getElementById('hist-empty-msg');
+  const cr=document.getElementById('current-result');
+  if(h.length>0){
+    const r=h[0];cr.classList.add('show');
+    document.getElementById('cr-dl').textContent=r.dl??'—';
+    document.getElementById('cr-ul').textContent=r.ul??'—';
+    document.getElementById('cr-ping').textContent=r.ping??'—';
+    document.getElementById('cr-jitter').textContent=r.jitter??'—';
+    const qc=qColor(r.dl);
+    document.getElementById('cr-quality-badge').textContent=qLabel(r.dl);
+    document.getElementById('cr-quality-badge').style.color=qc;
+    document.getElementById('cr-datetime').textContent=fmtDate(r.ts).replace('\n',' · ');
+  }else cr.classList.remove('show');
+  list.querySelectorAll('.hist-item').forEach(e=>e.remove());
+  const past=h.slice(1);
+  if(!past.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  past.forEach((r,i)=>{
+    const qc=qColor(r.dl);
+    const el=document.createElement('div');el.className='hist-item';
+    el.innerHTML=`
+      <span class="hist-num">${i+2}</span>
+      <div class="hist-bar" style="background:${qc};opacity:.55"></div>
+      <div class="hist-primary">
+        <div class="hist-p"><div class="hist-p-v" style="color:var(--cyan)">${r.dl??'—'}</div><div class="hist-p-l">↓ Mb</div></div>
+        <div class="hist-sep"></div>
+        <div class="hist-p"><div class="hist-p-v" style="color:var(--purple)">${r.ul??'—'}</div><div class="hist-p-l">↑ Mb</div></div>
+      </div>
+      <div class="hist-secondary">
+        <div class="hist-s"><span class="hist-s-v" style="color:var(--gold)">${r.ping??'—'}</span><span class="hist-s-l">ms</span></div>
+        <div class="hist-s"><span class="hist-s-v" style="color:var(--amber)">${r.jitter??'—'}</span><span class="hist-s-l">jit</span></div>
+      </div>
+      <div class="hist-date">${fmtDate(r.ts)}</div>`;
+    list.appendChild(el);
+  });
+}
+document.getElementById('clear-btn').onclick=()=>{saveH([]);document.getElementById('current-result').classList.remove('show');renderHistory();};
+
+// ══════════════════════════════════════════════════════════
+// NETWORK ENGINE
+// ══════════════════════════════════════════════════════════
+function withTO(p,ms){return Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error('t')),ms))]);}
+
+async function measurePingJitter(deadline,onSample){
+  const urls=[['https://speed.cloudflare.com/__down?bytes=0','cors'],['https://1.1.1.1/cdn-cgi/trace','no-cors'],['https://www.google.com/generate_204','no-cors']];
+  let url=null,mode=null;
+  for(const[u,m]of urls){try{await withTO(fetch(u,{cache:'no-store',mode:m}),3000);url=u;mode=m;break;}catch{}}
+  if(!url)return{ping:null,jitter:null};
+  const samples=[];
+  while(performance.now()<deadline){
+    try{const t0=performance.now();await withTO(fetch(url,{cache:'no-store',mode}),2000);samples.push(Math.round(performance.now()-t0));onSample(samples);}catch{}
+    await new Promise(r=>setTimeout(r,350));
+  }
+  if(!samples.length)return{ping:null,jitter:null};
+  const sorted=[...samples].sort((a,b)=>a-b);
+  const median=sorted[Math.floor(sorted.length/2)];
+  let jSum=0;for(let i=1;i<samples.length;i++)jSum+=Math.abs(samples[i]-samples[i-1]);
+  return{ping:median,jitter:samples.length>1?Math.round(jSum/(samples.length-1)):0};
+}
+
+async function measureDownload(deadline,onLive){
+  const URLS=['https://speed.cloudflare.com/__down?bytes=10000000','https://httpbin.org/bytes/2000000','https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js','https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'];
+  const testStart=performance.now(),WARMUP=1500;
+  let mBytes=0,mStart=null,wBytes=0,wStart=performance.now(),idx=0;
+  async function stream(url){
+    try{
+      const r=await withTO(fetch(url,{cache:'no-store'}),Math.min(deadline-performance.now(),18000));
+      if(!r.ok)return;
+      if(r.body?.getReader){
+        const rdr=r.body.getReader();
+        while(true){
+          if(performance.now()>=deadline){try{rdr.cancel();}catch{}break;}
+          const{done,value}=await rdr.read();if(done)break;
+          const now=performance.now();
+          if(now-testStart>WARMUP){if(!mStart)mStart=now;mBytes+=value.length;wBytes+=value.length;}
+          const dt=(now-wStart)/1000;
+          if(dt>=0.2&&now-testStart>WARMUP){onLive(wBytes*8/dt/1e6);wBytes=0;wStart=now;}
+        }
+      }else{const buf=await r.arrayBuffer();if(performance.now()-testStart>WARMUP)mBytes+=buf.byteLength;}
+    }catch{}
+  }
+  const p1=stream(URLS[0]);
+  await new Promise(r=>setTimeout(r,200));
+  const p2=stream(URLS[1%URLS.length]);
+  while(performance.now()<deadline-600){await new Promise(r=>setTimeout(r,400));if(performance.now()<deadline-600)stream(URLS[(++idx)%URLS.length]);}
+  await Promise.allSettled([p1,p2]);
+  const dt=mStart?(performance.now()-mStart)/1000:(performance.now()-testStart)/1000;
+  return(mBytes>0&&dt>0.5)?+(mBytes*8/dt/1e6).toFixed(2):null;
+}
+
+function measureUpload(deadline,onLive){
+  return new Promise(resolve=>{
+    const URLS=['https://speed.cloudflare.com/__up','https://httpbin.org/post'];
+    const CHUNK=2_000_000;let total=0,start=performance.now(),idx=0,fails=0;
+    function chunk(){
+      if(performance.now()>=deadline){const dt=(performance.now()-start)/1000;resolve(total>0?+(total*8/dt/1e6).toFixed(2):null);return;}
+      const url=URLS[idx%URLS.length],data=new Uint8Array(CHUNK),xhr=new XMLHttpRequest(),cs=performance.now();let cb=0;
+      xhr.upload.addEventListener('progress',e=>{if(!e.lengthComputable)return;const l=e.loaded-cb;cb=e.loaded;total+=l;const dt=(performance.now()-cs)/1000;if(dt>0.2)onLive(e.loaded*8/dt/1e6);});
+      xhr.addEventListener('load',()=>{fails=0;chunk();});
+      xhr.addEventListener('error',()=>{fails++;idx++;if(fails>=4)resolve(null);else setTimeout(chunk,300);});
+      xhr.timeout=Math.min(deadline-performance.now(),12000);
+      xhr.addEventListener('timeout',()=>{fails++;idx++;if(fails>=4)resolve(null);else chunk();});
+      xhr.open('POST',url);xhr.send(data.buffer);
+    }
+    chunk();
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// RUNNER
+// ══════════════════════════════════════════════════════════
+const DUR=10000;
+let lastResult={ping:null,jitter:null,dl:null,ul:null};
+function resetBtn(){document.getElementById('start-btn').style.background='linear-gradient(135deg,#e8c96a,#c9a84c)';document.getElementById('start-btn').style.boxShadow='0 8px 28px rgba(201,168,76,0.28)';document.getElementById('start-btn').style.color='#07080f';}
+
+async function runTest(){
+  if(busy)return;busy=true;
+  ['download','upload','ping','jitter'].forEach(n=>setPV(n,'—'));
+  document.getElementById('quality').classList.remove('show');
+  document.getElementById('warn-box').classList.remove('show');
+  document.getElementById('unit-ul').textContent='Mbps';
+  setTarget(0,'#c9a84c');stopTimer();
+  lastResult={ping:null,jitter:null,dl:null,ul:null};
+
+  // PING + JITTER
+  phase='ping';const cp=PC.ping;
+  setAmbient(cp);activatePrimary('ping');showSpinner(true,cp);setDot('ping');resetBtn();
+  setStatus(T[lang].pp,cp,true);startTimer(cp,DUR);
+  const pingDeadline=performance.now()+DUR;
+  const{ping,jitter}=await measurePingJitter(pingDeadline,(s)=>{
+    const last=s[s.length-1];setPV('ping',last);
+    setTarget(Math.max(10,Math.min(360,350-last*1.3)),cp);
+    if(s.length>1){let j=0;for(let i=1;i<s.length;i++)j+=Math.abs(s[i]-s[i-1]);setPV('jitter',Math.round(j/(s.length-1)));}
+  });
+  setPV('ping',ping??'N/A',ping?PC.ping:'#4a5568');
+  setPV('jitter',jitter??'N/A',jitter!==null?PC.jitter:'#4a5568');
+  lastResult.ping=ping;lastResult.jitter=jitter;
+  setTarget(0,cp);await new Promise(r=>setTimeout(r,450));stopTimer();
+
+  // DOWNLOAD
+  phase='download';const cd=PC.download;
+  setAmbient(cd);activatePrimary('download');showSpinner(true,cd);setDot('download');
+  document.getElementById('start-btn').style.background=`linear-gradient(135deg,${cd}dd,${cd}88)`;
+  document.getElementById('start-btn').style.color='#07080f';
+  setStatus(T[lang].pd,cd,true);startTimer(cd,DUR);
+  const dlDeadline=performance.now()+DUR;
+  const dlResult=await measureDownload(dlDeadline,(mbps)=>{
+    setTarget(mbps,cd);
+    const el=document.getElementById('val-dl');el.textContent=mbps<10?mbps.toFixed(1):Math.round(mbps).toString();el.style.color='rgba(0,212,255,0.5)';
+  });
+  setPV('download',dlResult!==null?fmtSpd(dlResult):'N/A',dlResult!==null?cd:'#4a5568');
+  lastResult.dl=dlResult!==null?fmtSpd(dlResult):null;
+  setTarget(0,cd);await new Promise(r=>setTimeout(r,450));stopTimer();
+
+  // UPLOAD
+  phase='upload';const cu=PC.upload;
+  setAmbient(cu);activatePrimary('upload');showSpinner(true,cu);setDot('upload');
+  document.getElementById('start-btn').style.background=`linear-gradient(135deg,${cu}dd,${cu}88)`;
+  setStatus(T[lang].pu,cu,true);startTimer(cu,DUR);
+  const ulDeadline=performance.now()+DUR;
+  const ulResult=await measureUpload(ulDeadline,(mbps)=>{
+    setTarget(mbps,cu);
+    const el=document.getElementById('val-ul');el.textContent=mbps<10?mbps.toFixed(1):Math.round(mbps).toString();el.style.color='rgba(168,85,247,0.5)';
+  });
+  if(ulResult!==null){setPV('upload',fmtSpd(ulResult));}
+  else{setPV('upload','N/A','#4a5568');document.getElementById('unit-ul').textContent='';document.getElementById('wt').textContent=T[lang].ulwarn;document.getElementById('wm').textContent=T[lang].ulwarnmsg;document.getElementById('warn-box').classList.add('show');}
+  lastResult.ul=ulResult!==null?fmtSpd(ulResult):null;
+  setTarget(0,cu);await new Promise(r=>setTimeout(r,450));stopTimer();
+
+  // DONE
+  phase='done';const cD=PC.done;
+  setAmbient(cD);activatePrimary('');showSpinner(false,cD);resetBtn();
+  setStatus(T[lang].done+' ✓',cD,false);
+  if(dlResult!==null){
+    const qc=qColor(dlResult);
+    document.getElementById('quality-dot').style.cssText=`width:6px;height:6px;border-radius:50%;flex-shrink:0;background:${qc};box-shadow:0 0 8px ${qc}`;
+    document.getElementById('quality-text').textContent=qLabel(dlResult);
+    document.getElementById('quality').classList.add('show');
+  }
+  addR(lastResult);renderHistory();
+  updateBtn();busy=false;
+}
+
+// INIT
+document.getElementById('start-btn').onclick=runTest;
+setStatus(T[lang].idle,'rgba(255,255,255,0.18)',false);
+const dl2=navigator.language?.slice(0,2);
+if(dl2&&T[dl2])applyLang(dl2);else applyLang('ca');
+renderHistory();
+try{const mb=new Blob([JSON.stringify({name:"SH Pulse",short_name:"SH Pulse",start_url:".",display:"standalone",background_color:"#07080f",theme_color:"#07080f"})],{type:'application/json'});const ml=document.createElement('link');ml.rel='manifest';ml.href=URL.createObjectURL(mb);document.head.appendChild(ml);}catch{}
+const tm=document.createElement('meta');tm.name='theme-color';tm.content='#07080f';document.head.appendChild(tm);
+</script>
+</body>
+</html>
