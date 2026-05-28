@@ -77,9 +77,9 @@
   --app-bg:radial-gradient(ellipse at 50% -10%,rgba(168,85,247,0.1) 0%,transparent 55%),linear-gradient(180deg,#0f0a1a 0%,#130d20 100%);
 }
 
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background .6s ease}
+html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background .6s ease}
 body{display:flex;justify-content:center;min-height:100vh}
-#app{width:100%;max-width:420px;min-height:100vh;padding:0 0 52px;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden;background:var(--app-bg)}
+#app{width:100%;max-width:420px;min-height:100vh;padding:0 0 52px;display:flex;flex-direction:column;align-items:center;position:relative;overflow-x:clip;background:var(--app-bg)}
 #ambient{position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:520px;height:520px;border-radius:50%;pointer-events:none;transition:background 1s ease;z-index:0;opacity:.65}
 
 /* ── TOPBAR ── */
