@@ -113,20 +113,40 @@ body{display:flex;justify-content:center;min-height:100vh}
 #hero-badge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:4px 12px;border:1px solid var(--border);border-radius:20px;font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;background:var(--surface)}
 #hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:glow-pulse 2.5s ease-in-out infinite;flex-shrink:0}
 
+/* ══ CONNECTION INFO ══ */
+#conn-card{width:calc(100% - 40px);margin-top:14px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);z-index:1}
+#conn-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+#conn-title{font-size:9.5px;font-weight:700;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+#conn-status-badge{display:flex;align-items:center;gap:5px;font-size:8.5px;font-weight:600;color:var(--text-muted);letter-spacing:.4px;text-transform:uppercase}
+#conn-status-dot{width:6px;height:6px;border-radius:50%;background:var(--text-muted);transition:background .3s,box-shadow .3s;flex-shrink:0}
+#conn-status-dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
+#conn-status-dot.pending{animation:pulseFade 1.4s ease-in-out infinite}
+#conn-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px 14px}
+.conn-item{display:flex;flex-direction:column;gap:2px;min-width:0}
+.conn-label{font-size:8.5px;color:var(--text-muted);letter-spacing:.6px;text-transform:uppercase;font-weight:600}
+.conn-value{font-size:12px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+[data-theme="day"] #conn-card{box-shadow:0 1px 8px rgba(0,0,0,0.06)}
+
 /* ── GAUGE ── */
 #gauge-section{width:100%;display:flex;flex-direction:column;align-items:center;padding:8px 20px 0;z-index:1}
 #gauge-wrap{width:100%;max-width:310px}
 svg#gauge{width:100%;display:block;overflow:visible}
 
+/* ── PROGRESS STEPS ── */
+#progress-steps{display:flex;gap:4px;width:calc(100% - 40px);max-width:270px;margin:2px 0 0;z-index:1}
+.pstep{flex:1;height:3px;border-radius:2px;background:var(--surface2);transition:background .3s,opacity .3s}
+.pstep.active{animation:pulseFade 1.4s ease-in-out infinite}
+
 /* ── TIMER ── */
-#timer-wrap{width:calc(100% - 40px);max-width:270px;display:flex;align-items:center;gap:10px;z-index:1;margin:5px 0 6px}
+#timer-wrap{width:calc(100% - 40px);max-width:270px;display:flex;align-items:center;gap:10px;z-index:1;margin:9px 0 6px}
 #timer-bar{flex:1;height:2px;background:var(--surface2);border-radius:1px;overflow:hidden}
 #timer-fill{height:100%;border-radius:1px;width:0%;transition:background .4s}
 #timer-lbl{font-size:11px;color:var(--text-muted);font-weight:600;min-width:26px;text-align:right;font-variant-numeric:tabular-nums}
 
 /* ── STATUS ── */
-#status{font-size:11px;text-align:center;margin:0 0 14px;min-height:18px;letter-spacing:.8px;font-weight:600;transition:color .4s;display:flex;align-items:center;justify-content:center;gap:6px;z-index:1;text-transform:uppercase}
+#status{font-size:11px;text-align:center;margin:0 0 4px;min-height:18px;letter-spacing:.8px;font-weight:600;transition:color .4s;display:flex;align-items:center;justify-content:center;gap:6px;z-index:1;text-transform:uppercase}
 #status.pulse{animation:pulseFade 1.4s ease-in-out infinite}
+#time-estimate{font-size:9.5px;color:var(--text-muted);text-align:center;margin:0 0 14px;letter-spacing:.3px;min-height:13px}
 
 /* ── WARN ── */
 #warn-box{width:calc(100% - 40px);background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:14px;padding:11px 14px;margin-bottom:14px;z-index:1;display:none;align-items:flex-start;gap:9px}
@@ -168,8 +188,12 @@ svg#gauge{width:100%;display:block;overflow:visible}
 #quality-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;transition:background .3s,box-shadow .3s}
 #quality-body{display:flex;flex-direction:column;gap:3px;flex:1}
 #quality-sublabel{font-size:8.5px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
-#quality-text{font-size:15px;font-weight:700;letter-spacing:.05px;transition:color .3s}
+#quality-text{font-size:14px;font-weight:700;letter-spacing:.05px;line-height:1.4;transition:color .3s}
 [data-theme="day"] #quality{box-shadow:0 1px 8px rgba(0,0,0,0.06)}
+
+/* ── DISCLAIMER ── */
+#disclaimer{width:calc(100% - 40px);margin-top:10px;font-size:9px;line-height:1.5;color:var(--text-muted);text-align:center;letter-spacing:.2px;opacity:.7;display:none;z-index:1}
+#disclaimer.show{display:block}
 
 /* ══ HISTORY ══ */
 #history-section{width:calc(100% - 40px);z-index:1;margin-top:36px}
@@ -297,6 +321,25 @@ html.switching *{transition:background-color .5s ease,color .5s ease,border-colo
   <div id="hero-badge"><span id="hero-badge-dot"></span><span id="hero-time-label">Nit</span></div>
 </div>
 
+<!-- CONNECTION INFO -->
+<div id="conn-card">
+  <div id="conn-header">
+    <span id="conn-title">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+      <span id="conn-title-txt">Connexió detectada</span>
+    </span>
+    <span id="conn-status-badge"><span id="conn-status-dot" class="pending"></span><span id="conn-status-text">—</span></span>
+  </div>
+  <div id="conn-grid">
+    <div class="conn-item"><span class="conn-label" id="conn-lbl-isp">Operador</span><span class="conn-value" id="conn-isp">—</span></div>
+    <div class="conn-item"><span class="conn-label" id="conn-lbl-ip">IP pública</span><span class="conn-value" id="conn-ip">—</span></div>
+    <div class="conn-item"><span class="conn-label" id="conn-lbl-city">Ciutat</span><span class="conn-value" id="conn-city">—</span></div>
+    <div class="conn-item"><span class="conn-label" id="conn-lbl-country">País</span><span class="conn-value" id="conn-country">—</span></div>
+    <div class="conn-item"><span class="conn-label" id="conn-lbl-server">Servidor de prova</span><span class="conn-value" id="conn-server">Cloudflare</span></div>
+    <div class="conn-item"><span class="conn-label" id="conn-lbl-region">Regió</span><span class="conn-value" id="conn-region">—</span></div>
+  </div>
+</div>
+
 <!-- GAUGE -->
 <div id="gauge-section">
 <div id="gauge-wrap">
@@ -340,12 +383,21 @@ html.switching *{transition:background-color .5s ease,color .5s ease,border-colo
 </div>
 </div>
 
+<!-- Progress steps -->
+<div id="progress-steps">
+  <span class="pstep" id="pstep-prep"></span>
+  <span class="pstep" id="pstep-download"></span>
+  <span class="pstep" id="pstep-upload"></span>
+  <span class="pstep" id="pstep-analyze"></span>
+</div>
+
 <!-- Timer -->
 <div id="timer-wrap">
   <div id="timer-bar"><div id="timer-fill"></div></div>
   <span id="timer-lbl"></span>
 </div>
 <div id="status"></div>
+<div id="time-estimate"></div>
 
 <!-- Warn -->
 <div id="warn-box">
@@ -397,6 +449,7 @@ html.switching *{transition:background-color .5s ease,color .5s ease,border-colo
     <span id="quality-text"></span>
   </div>
 </div>
+<div id="disclaimer"></div>
 
 <!-- HISTORY -->
 <div id="history-section">
@@ -511,18 +564,18 @@ function stopTimer(){clearInterval(timerIv);timerFill.style.transition='width .4
 // ══ LANGUAGES ══
 const LANGS={ca:"Català",es:"Español",en:"English",fr:"Français",de:"Deutsch",it:"Italiano",pt:"Português",nl:"Nederlands",pl:"Polski",sv:"Svenska",ro:"Română",el:"Ελληνικά"};
 const T={
-  ca:{dl:"Descàrrega",ul:"Pujada",start:"Iniciar diagnòstic",again:"Repetir diagnòstic",prep:"Preparant diagnòstic...",pd:"Mesurant baixada...",pu:"Mesurant pujada...",analyze:"Analitzant rendiment...",done:"Diagnòstic completat",idle:"Prem per iniciar el diagnòstic",ulwarn:"No s'ha pogut mesurar la pujada",ulwarnmsg:"Comprova la connexió i torna-ho a provar.",hi:"Connexió excel·lent",ok:"Connexió bona",fair:"Connexió correcta",lo:"Connexió millorable",history:"Historial de proves",current:"Diagnòstic actual",clear:"Esborrar",empty:"Cap diagnòstic realitzat",today:"Avui",yesterday:"Ahir",dawn:"Matí",day:"Dia",golden:"Tarda",dusk:"Capvespre",night:"Nit",quality:"Qualitat de connexió"},
-  es:{dl:"Descarga",ul:"Subida",start:"Iniciar diagnóstico",again:"Repetir",prep:"Preparando diagnóstico...",pd:"Midiendo bajada...",pu:"Midiendo subida...",analyze:"Analizando rendimiento...",done:"Diagnóstico completado",idle:"Pulsa para iniciar",ulwarn:"No se pudo medir la subida",ulwarnmsg:"Comprueba la conexión e inténtalo de nuevo.",hi:"Conexión excelente",ok:"Conexión buena",fair:"Conexión correcta",lo:"Conexión mejorable",history:"Historial de pruebas",current:"Diagnóstico actual",clear:"Borrar",empty:"Sin diagnósticos",today:"Hoy",yesterday:"Ayer",dawn:"Mañana",day:"Día",golden:"Tarde",dusk:"Atardecer",night:"Noche",quality:"Calidad de conexión"},
-  en:{dl:"Download",ul:"Upload",start:"Start diagnostic",again:"Run again",prep:"Preparing diagnostic...",pd:"Measuring download...",pu:"Measuring upload...",analyze:"Analyzing performance...",done:"Diagnostic complete",idle:"Press to start diagnostic",ulwarn:"Upload measurement failed",ulwarnmsg:"Check your connection and try again.",hi:"Excellent connection",ok:"Good connection",fair:"Fair connection",lo:"Poor connection",history:"Test history",current:"Current diagnostic",clear:"Clear",empty:"No diagnostics yet",today:"Today",yesterday:"Yesterday",dawn:"Dawn",day:"Day",golden:"Afternoon",dusk:"Dusk",night:"Night",quality:"Connection quality"},
-  fr:{dl:"Téléchargement",ul:"Upload",start:"Démarrer diagnostic",again:"Relancer",prep:"Préparation du diagnostic...",pd:"Mesure du téléchargement...",pu:"Mesure upload...",analyze:"Analyse des performances...",done:"Diagnostic terminé",idle:"Appuyez pour démarrer",ulwarn:"Échec de la mesure upload",ulwarnmsg:"Vérifiez votre connexion et réessayez.",hi:"Connexion excellente",ok:"Bonne connexion",fair:"Connexion correcte",lo:"Connexion faible",history:"Historique des tests",current:"Diagnostic actuel",clear:"Effacer",empty:"Aucun diagnostic",today:"Aujourd'hui",yesterday:"Hier",dawn:"Matin",day:"Jour",golden:"Après-midi",dusk:"Crépuscule",night:"Nuit",quality:"Qualité de connexion"},
-  de:{dl:"Download",ul:"Upload",start:"Diagnose starten",again:"Wiederholen",prep:"Diagnose wird vorbereitet...",pd:"Download wird gemessen...",pu:"Upload wird gemessen...",analyze:"Leistung wird analysiert...",done:"Diagnose abgeschlossen",idle:"Zum Starten drücken",ulwarn:"Upload-Messung fehlgeschlagen",ulwarnmsg:"Verbindung prüfen und erneut versuchen.",hi:"Ausgezeichnete Verbindung",ok:"Gute Verbindung",fair:"Ausreichende Verbindung",lo:"Schwache Verbindung",history:"Testverlauf",current:"Aktuelle Diagnose",clear:"Löschen",empty:"Keine Diagnosen",today:"Heute",yesterday:"Gestern",dawn:"Morgen",day:"Tag",golden:"Nachmittag",dusk:"Dämmerung",night:"Nacht",quality:"Verbindungsqualität"},
-  it:{dl:"Download",ul:"Upload",start:"Avvia diagnosi",again:"Ripeti",prep:"Preparazione diagnosi...",pd:"Misurazione download...",pu:"Misurazione upload...",analyze:"Analisi delle prestazioni...",done:"Diagnosi completata",idle:"Premi per iniziare",ulwarn:"Misurazione upload fallita",ulwarnmsg:"Controlla la connessione e riprova.",hi:"Connessione eccellente",ok:"Buona connessione",fair:"Connessione corretta",lo:"Connessione debole",history:"Storico test",current:"Diagnosi attuale",clear:"Cancella",empty:"Nessuna diagnosi",today:"Oggi",yesterday:"Ieri",dawn:"Mattina",day:"Giorno",golden:"Pomeriggio",dusk:"Tramonto",night:"Notte",quality:"Qualità della connessione"},
-  pt:{dl:"Download",ul:"Upload",start:"Iniciar diagnóstico",again:"Repetir",prep:"Preparando diagnóstico...",pd:"Medindo download...",pu:"Medindo upload...",analyze:"Analisando desempenho...",done:"Diagnóstico concluído",idle:"Prima para iniciar",ulwarn:"Falha na medição do upload",ulwarnmsg:"Verifique a conexão e tente novamente.",hi:"Conexão excelente",ok:"Boa conexão",fair:"Conexão correta",lo:"Conexão fraca",history:"Histórico de testes",current:"Diagnóstico atual",clear:"Limpar",empty:"Sem diagnósticos",today:"Hoje",yesterday:"Ontem",dawn:"Manhã",day:"Dia",golden:"Tarde",dusk:"Entardecer",night:"Noite",quality:"Qualidade da conexão"},
-  nl:{dl:"Download",ul:"Upload",start:"Diagnose starten",again:"Opnieuw",prep:"Diagnose voorbereiden...",pd:"Download meten...",pu:"Upload meten...",analyze:"Prestaties analyseren...",done:"Diagnose voltooid",idle:"Druk om te starten",ulwarn:"Uploadmeting mislukt",ulwarnmsg:"Controleer uw verbinding en probeer opnieuw.",hi:"Uitstekende verbinding",ok:"Goede verbinding",fair:"Correcte verbinding",lo:"Slechte verbinding",history:"Testgeschiedenis",current:"Huidige diagnose",clear:"Wissen",empty:"Geen diagnoses",today:"Vandaag",yesterday:"Gisteren",dawn:"Ochtend",day:"Dag",golden:"Middag",dusk:"Schemering",night:"Nacht",quality:"Verbindingskwaliteit"},
-  pl:{dl:"Pobieranie",ul:"Wysyłanie",start:"Rozpocznij diagnozę",again:"Powtórz",prep:"Przygotowywanie diagnozy...",pd:"Pomiar pobierania...",pu:"Pomiar wysyłania...",analyze:"Analiza wydajności...",done:"Diagnoza zakończona",idle:"Naciśnij, aby rozpocząć",ulwarn:"Pomiar wysyłania nie powiódł się",ulwarnmsg:"Sprawdź połączenie i spróbuj ponownie.",hi:"Doskonałe połączenie",ok:"Dobre połączenie",fair:"Poprawne połączenie",lo:"Słabe połączenie",history:"Historia testów",current:"Bieżąca diagnoza",clear:"Wyczyść",empty:"Brak diagnoz",today:"Dziś",yesterday:"Wczoraj",dawn:"Ranek",day:"Dzień",golden:"Popołudnie",dusk:"Zmierzch",night:"Noc",quality:"Jakość połączenia"},
-  sv:{dl:"Nedladdning",ul:"Uppladdning",start:"Starta diagnos",again:"Kör igen",prep:"Förbereder diagnos...",pd:"Mäter nedladdning...",pu:"Mäter uppladdning...",analyze:"Analyserar prestanda...",done:"Diagnos slutförd",idle:"Tryck för att starta",ulwarn:"Uppladdningsmätning misslyckades",ulwarnmsg:"Kontrollera anslutningen och försök igen.",hi:"Utmärkt anslutning",ok:"Bra anslutning",fair:"Korrekt anslutning",lo:"Dålig anslutning",history:"Testhistorik",current:"Aktuell diagnos",clear:"Rensa",empty:"Inga diagnoser",today:"Idag",yesterday:"Igår",dawn:"Morgon",day:"Dag",golden:"Eftermiddag",dusk:"Skymning",night:"Natt",quality:"Anslutningskvalitet"},
-  ro:{dl:"Descărcare",ul:"Încărcare",start:"Pornește diagnosticul",again:"Repetă",prep:"Se pregătește diagnosticul...",pd:"Măsurare descărcare...",pu:"Măsurare încărcare...",analyze:"Se analizează performanța...",done:"Diagnostic finalizat",idle:"Apasă pentru a începe",ulwarn:"Măsurarea încărcării a eșuat",ulwarnmsg:"Verificați conexiunea și încercați din nou.",hi:"Conexiune excelentă",ok:"Conexiune bună",fair:"Conexiune corectă",lo:"Conexiune slabă",history:"Istoric teste",current:"Diagnostic curent",clear:"Șterge",empty:"Niciun diagnostic",today:"Azi",yesterday:"Ieri",dawn:"Dimineață",day:"Zi",golden:"După-amiază",dusk:"Amurg",night:"Noapte",quality:"Calitatea conexiunii"},
-  el:{dl:"Λήψη",ul:"Αποστολή",start:"Έναρξη διαγνωστικού",again:"Επανάληψη",prep:"Προετοιμασία διαγνωστικού...",pd:"Μέτρηση λήψης...",pu:"Μέτρηση αποστολής...",analyze:"Ανάλυση απόδοσης...",done:"Διαγνωστικό ολοκληρώθηκε",idle:"Πατήστε για έναρξη",ulwarn:"Αποτυχία μέτρησης αποστολής",ulwarnmsg:"Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.",hi:"Εξαιρετική σύνδεση",ok:"Καλή σύνδεση",fair:"Σωστή σύνδεση",lo:"Κακή σύνδεση",history:"Ιστορικό δοκιμών",current:"Τρέχον διαγνωστικό",clear:"Εκκαθάριση",empty:"Δεν έχουν γίνει διαγνωστικά",today:"Σήμερα",yesterday:"Χθες",dawn:"Πρωί",day:"Ημέρα",golden:"Απόγευμα",dusk:"Δειλινό",night:"Νύχτα",quality:"Ποιότητα σύνδεσης"},
+  ca:{dl:"Descàrrega",ul:"Pujada",start:"Iniciar diagnòstic",again:"Repetir diagnòstic",prep:"Preparant diagnòstic...",pd:"Mesurant baixada...",pu:"Mesurant pujada...",analyze:"Analitzant rendiment...",done:"Diagnòstic completat",idle:"Prem per iniciar el diagnòstic",ulwarn:"No s'ha pogut mesurar la pujada",ulwarnmsg:"Comprova la connexió i torna-ho a provar.",hi:"Connexió excel·lent",ok:"Connexió bona",fair:"Connexió correcta",lo:"Connexió millorable",history:"Historial de proves",current:"Diagnòstic actual",clear:"Esborrar",empty:"Cap diagnòstic realitzat",today:"Avui",yesterday:"Ahir",dawn:"Matí",day:"Dia",golden:"Tarda",dusk:"Capvespre",night:"Nit",quality:"Qualitat de connexió",qm_hi:"Connexió excel·lent per streaming, videotrucades i feina intensiva",qm_ok:"Connexió bona per a ús habitual",qm_fair:"Connexió correcta",qm_lo:"Connexió millorable",connTitle:"Connexió detectada",connIsp:"Operador",connIp:"IP pública",connCity:"Ciutat",connCountry:"País",connServer:"Servidor de prova",connRegion:"Regió",connDetected:"Detectat",connUnavailable:"No disponible",connDetecting:"Detectant...",connAuto:"automàtica",advisory:"Resultat estimat segons servidor de prova (Cloudflare). Pot variar respecte a Speedtest i altres serveis segons servidor, xarxa i dispositiu.",estTime:"Temps estimat: ~{s} s"},
+  es:{dl:"Descarga",ul:"Subida",start:"Iniciar diagnóstico",again:"Repetir",prep:"Preparando diagnóstico...",pd:"Midiendo bajada...",pu:"Midiendo subida...",analyze:"Analizando rendimiento...",done:"Diagnóstico completado",idle:"Pulsa para iniciar",ulwarn:"No se pudo medir la subida",ulwarnmsg:"Comprueba la conexión e inténtalo de nuevo.",hi:"Conexión excelente",ok:"Conexión buena",fair:"Conexión correcta",lo:"Conexión mejorable",history:"Historial de pruebas",current:"Diagnóstico actual",clear:"Borrar",empty:"Sin diagnósticos",today:"Hoy",yesterday:"Ayer",dawn:"Mañana",day:"Día",golden:"Tarde",dusk:"Atardecer",night:"Noche",quality:"Calidad de conexión",qm_hi:"Conexión excelente para streaming, videollamadas y trabajo intensivo",qm_ok:"Conexión buena para uso habitual",qm_fair:"Conexión correcta",qm_lo:"Conexión mejorable",connTitle:"Conexión detectada",connIsp:"Operador",connIp:"IP pública",connCity:"Ciudad",connCountry:"País",connServer:"Servidor de prueba",connRegion:"Región",connDetected:"Detectado",connUnavailable:"No disponible",connDetecting:"Detectando...",connAuto:"automática",advisory:"Resultado estimado según servidor de prueba (Cloudflare). Puede variar respecto a Speedtest y otros servicios según servidor, red y dispositivo.",estTime:"Tiempo estimado: ~{s} s"},
+  en:{dl:"Download",ul:"Upload",start:"Start diagnostic",again:"Run again",prep:"Preparing diagnostic...",pd:"Measuring download...",pu:"Measuring upload...",analyze:"Analyzing performance...",done:"Diagnostic complete",idle:"Press to start diagnostic",ulwarn:"Upload measurement failed",ulwarnmsg:"Check your connection and try again.",hi:"Excellent connection",ok:"Good connection",fair:"Fair connection",lo:"Poor connection",history:"Test history",current:"Current diagnostic",clear:"Clear",empty:"No diagnostics yet",today:"Today",yesterday:"Yesterday",dawn:"Dawn",day:"Day",golden:"Afternoon",dusk:"Dusk",night:"Night",quality:"Connection quality",qm_hi:"Excellent connection for streaming, video calls and heavy workloads",qm_ok:"Good connection for everyday use",qm_fair:"Fair connection",qm_lo:"Connection could be improved",connTitle:"Connection detected",connIsp:"Carrier",connIp:"Public IP",connCity:"City",connCountry:"Country",connServer:"Test server",connRegion:"Region",connDetected:"Detected",connUnavailable:"Not available",connDetecting:"Detecting...",connAuto:"automatic",advisory:"Estimated result based on test server (Cloudflare). May vary from Speedtest and other services depending on server, network and device.",estTime:"Estimated time: ~{s}s"},
+  fr:{dl:"Téléchargement",ul:"Upload",start:"Démarrer diagnostic",again:"Relancer",prep:"Préparation du diagnostic...",pd:"Mesure du téléchargement...",pu:"Mesure upload...",analyze:"Analyse des performances...",done:"Diagnostic terminé",idle:"Appuyez pour démarrer",ulwarn:"Échec de la mesure upload",ulwarnmsg:"Vérifiez votre connexion et réessayez.",hi:"Connexion excellente",ok:"Bonne connexion",fair:"Connexion correcte",lo:"Connexion faible",history:"Historique des tests",current:"Diagnostic actuel",clear:"Effacer",empty:"Aucun diagnostic",today:"Aujourd'hui",yesterday:"Hier",dawn:"Matin",day:"Jour",golden:"Après-midi",dusk:"Crépuscule",night:"Nuit",quality:"Qualité de connexion",qm_hi:"Connexion excellente pour le streaming, les appels vidéo et le travail intensif",qm_ok:"Bonne connexion pour un usage courant",qm_fair:"Connexion correcte",qm_lo:"Connexion à améliorer",connTitle:"Connexion détectée",connIsp:"Opérateur",connIp:"IP publique",connCity:"Ville",connCountry:"Pays",connServer:"Serveur de test",connRegion:"Région",connDetected:"Détecté",connUnavailable:"Non disponible",connDetecting:"Détection...",connAuto:"automatique",advisory:"Résultat estimé selon le serveur de test (Cloudflare). Peut varier par rapport à Speedtest et à d'autres services selon le serveur, le réseau et l'appareil.",estTime:"Temps estimé : ~{s} s"},
+  de:{dl:"Download",ul:"Upload",start:"Diagnose starten",again:"Wiederholen",prep:"Diagnose wird vorbereitet...",pd:"Download wird gemessen...",pu:"Upload wird gemessen...",analyze:"Leistung wird analysiert...",done:"Diagnose abgeschlossen",idle:"Zum Starten drücken",ulwarn:"Upload-Messung fehlgeschlagen",ulwarnmsg:"Verbindung prüfen und erneut versuchen.",hi:"Ausgezeichnete Verbindung",ok:"Gute Verbindung",fair:"Ausreichende Verbindung",lo:"Schwache Verbindung",history:"Testverlauf",current:"Aktuelle Diagnose",clear:"Löschen",empty:"Keine Diagnosen",today:"Heute",yesterday:"Gestern",dawn:"Morgen",day:"Tag",golden:"Nachmittag",dusk:"Dämmerung",night:"Nacht",quality:"Verbindungsqualität",qm_hi:"Ausgezeichnete Verbindung für Streaming, Videoanrufe und intensives Arbeiten",qm_ok:"Gute Verbindung für den Alltag",qm_fair:"Ausreichende Verbindung",qm_lo:"Verbindung ausbaufähig",connTitle:"Verbindung erkannt",connIsp:"Anbieter",connIp:"Öffentliche IP",connCity:"Stadt",connCountry:"Land",connServer:"Testserver",connRegion:"Region",connDetected:"Erkannt",connUnavailable:"Nicht verfügbar",connDetecting:"Wird erkannt...",connAuto:"automatisch",advisory:"Geschätztes Ergebnis basierend auf dem Testserver (Cloudflare). Kann von Speedtest und anderen Diensten abweichen, je nach Server, Netzwerk und Gerät.",estTime:"Geschätzte Zeit: ~{s} s"},
+  it:{dl:"Download",ul:"Upload",start:"Avvia diagnosi",again:"Ripeti",prep:"Preparazione diagnosi...",pd:"Misurazione download...",pu:"Misurazione upload...",analyze:"Analisi delle prestazioni...",done:"Diagnosi completata",idle:"Premi per iniziare",ulwarn:"Misurazione upload fallita",ulwarnmsg:"Controlla la connessione e riprova.",hi:"Connessione eccellente",ok:"Buona connessione",fair:"Connessione corretta",lo:"Connessione debole",history:"Storico test",current:"Diagnosi attuale",clear:"Cancella",empty:"Nessuna diagnosi",today:"Oggi",yesterday:"Ieri",dawn:"Mattina",day:"Giorno",golden:"Pomeriggio",dusk:"Tramonto",night:"Notte",quality:"Qualità della connessione",qm_hi:"Connessione eccellente per streaming, videochiamate e lavoro intensivo",qm_ok:"Buona connessione per un uso quotidiano",qm_fair:"Connessione corretta",qm_lo:"Connessione migliorabile",connTitle:"Connessione rilevata",connIsp:"Operatore",connIp:"IP pubblico",connCity:"Città",connCountry:"Paese",connServer:"Server di test",connRegion:"Regione",connDetected:"Rilevato",connUnavailable:"Non disponibile",connDetecting:"Rilevamento...",connAuto:"automatica",advisory:"Risultato stimato in base al server di test (Cloudflare). Può variare rispetto a Speedtest e ad altri servizi in base a server, rete e dispositivo.",estTime:"Tempo stimato: ~{s} s"},
+  pt:{dl:"Download",ul:"Upload",start:"Iniciar diagnóstico",again:"Repetir",prep:"Preparando diagnóstico...",pd:"Medindo download...",pu:"Medindo upload...",analyze:"Analisando desempenho...",done:"Diagnóstico concluído",idle:"Prima para iniciar",ulwarn:"Falha na medição do upload",ulwarnmsg:"Verifique a conexão e tente novamente.",hi:"Conexão excelente",ok:"Boa conexão",fair:"Conexão correta",lo:"Conexão fraca",history:"Histórico de testes",current:"Diagnóstico atual",clear:"Limpar",empty:"Sem diagnósticos",today:"Hoje",yesterday:"Ontem",dawn:"Manhã",day:"Dia",golden:"Tarde",dusk:"Entardecer",night:"Noite",quality:"Qualidade da conexão",qm_hi:"Conexão excelente para streaming, videochamadas e trabalho intensivo",qm_ok:"Boa conexão para uso diário",qm_fair:"Conexão correta",qm_lo:"Conexão a melhorar",connTitle:"Conexão detectada",connIsp:"Operadora",connIp:"IP público",connCity:"Cidade",connCountry:"País",connServer:"Servidor de teste",connRegion:"Região",connDetected:"Detetado",connUnavailable:"Não disponível",connDetecting:"A detetar...",connAuto:"automática",advisory:"Resultado estimado com base no servidor de teste (Cloudflare). Pode variar em relação ao Speedtest e a outros serviços consoante o servidor, a rede e o dispositivo.",estTime:"Tempo estimado: ~{s} s"},
+  nl:{dl:"Download",ul:"Upload",start:"Diagnose starten",again:"Opnieuw",prep:"Diagnose voorbereiden...",pd:"Download meten...",pu:"Upload meten...",analyze:"Prestaties analyseren...",done:"Diagnose voltooid",idle:"Druk om te starten",ulwarn:"Uploadmeting mislukt",ulwarnmsg:"Controleer uw verbinding en probeer opnieuw.",hi:"Uitstekende verbinding",ok:"Goede verbinding",fair:"Correcte verbinding",lo:"Slechte verbinding",history:"Testgeschiedenis",current:"Huidige diagnose",clear:"Wissen",empty:"Geen diagnoses",today:"Vandaag",yesterday:"Gisteren",dawn:"Ochtend",day:"Dag",golden:"Middag",dusk:"Schemering",night:"Nacht",quality:"Verbindingskwaliteit",qm_hi:"Uitstekende verbinding voor streaming, videobellen en intensief werk",qm_ok:"Goede verbinding voor dagelijks gebruik",qm_fair:"Correcte verbinding",qm_lo:"Verbinding kan beter",connTitle:"Verbinding gedetecteerd",connIsp:"Provider",connIp:"Publiek IP",connCity:"Stad",connCountry:"Land",connServer:"Testserver",connRegion:"Regio",connDetected:"Gedetecteerd",connUnavailable:"Niet beschikbaar",connDetecting:"Detecteren...",connAuto:"automatisch",advisory:"Geschat resultaat op basis van de testserver (Cloudflare). Kan afwijken van Speedtest en andere diensten, afhankelijk van server, netwerk en apparaat.",estTime:"Geschatte tijd: ~{s} s"},
+  pl:{dl:"Pobieranie",ul:"Wysyłanie",start:"Rozpocznij diagnozę",again:"Powtórz",prep:"Przygotowywanie diagnozy...",pd:"Pomiar pobierania...",pu:"Pomiar wysyłania...",analyze:"Analiza wydajności...",done:"Diagnoza zakończona",idle:"Naciśnij, aby rozpocząć",ulwarn:"Pomiar wysyłania nie powiódł się",ulwarnmsg:"Sprawdź połączenie i spróbuj ponownie.",hi:"Doskonałe połączenie",ok:"Dobre połączenie",fair:"Poprawne połączenie",lo:"Słabe połączenie",history:"Historia testów",current:"Bieżąca diagnoza",clear:"Wyczyść",empty:"Brak diagnoz",today:"Dziś",yesterday:"Wczoraj",dawn:"Ranek",day:"Dzień",golden:"Popołudnie",dusk:"Zmierzch",night:"Noc",quality:"Jakość połączenia",qm_hi:"Doskonałe połączenie do streamingu, wideorozmów i intensywnej pracy",qm_ok:"Dobre połączenie do codziennego użytku",qm_fair:"Poprawne połączenie",qm_lo:"Połączenie do poprawy",connTitle:"Wykryto połączenie",connIsp:"Operator",connIp:"Publiczne IP",connCity:"Miasto",connCountry:"Kraj",connServer:"Serwer testowy",connRegion:"Region",connDetected:"Wykryto",connUnavailable:"Niedostępne",connDetecting:"Wykrywanie...",connAuto:"automatyczny",advisory:"Wynik szacunkowy na podstawie serwera testowego (Cloudflare). Może różnić się od Speedtest i innych usług w zależności od serwera, sieci i urządzenia.",estTime:"Szacowany czas: ~{s} s"},
+  sv:{dl:"Nedladdning",ul:"Uppladdning",start:"Starta diagnos",again:"Kör igen",prep:"Förbereder diagnos...",pd:"Mäter nedladdning...",pu:"Mäter uppladdning...",analyze:"Analyserar prestanda...",done:"Diagnos slutförd",idle:"Tryck för att starta",ulwarn:"Uppladdningsmätning misslyckades",ulwarnmsg:"Kontrollera anslutningen och försök igen.",hi:"Utmärkt anslutning",ok:"Bra anslutning",fair:"Korrekt anslutning",lo:"Dålig anslutning",history:"Testhistorik",current:"Aktuell diagnos",clear:"Rensa",empty:"Inga diagnoser",today:"Idag",yesterday:"Igår",dawn:"Morgon",day:"Dag",golden:"Eftermiddag",dusk:"Skymning",night:"Natt",quality:"Anslutningskvalitet",qm_hi:"Utmärkt anslutning för streaming, videosamtal och intensivt arbete",qm_ok:"Bra anslutning för vardagsbruk",qm_fair:"Korrekt anslutning",qm_lo:"Anslutningen kan förbättras",connTitle:"Anslutning upptäckt",connIsp:"Operatör",connIp:"Publik IP",connCity:"Stad",connCountry:"Land",connServer:"Testserver",connRegion:"Region",connDetected:"Upptäckt",connUnavailable:"Ej tillgänglig",connDetecting:"Upptäcker...",connAuto:"automatisk",advisory:"Uppskattat resultat baserat på testservern (Cloudflare). Kan variera jämfört med Speedtest och andra tjänster beroende på server, nätverk och enhet.",estTime:"Uppskattad tid: ~{s} s"},
+  ro:{dl:"Descărcare",ul:"Încărcare",start:"Pornește diagnosticul",again:"Repetă",prep:"Se pregătește diagnosticul...",pd:"Măsurare descărcare...",pu:"Măsurare încărcare...",analyze:"Se analizează performanța...",done:"Diagnostic finalizat",idle:"Apasă pentru a începe",ulwarn:"Măsurarea încărcării a eșuat",ulwarnmsg:"Verificați conexiunea și încercați din nou.",hi:"Conexiune excelentă",ok:"Conexiune bună",fair:"Conexiune corectă",lo:"Conexiune slabă",history:"Istoric teste",current:"Diagnostic curent",clear:"Șterge",empty:"Niciun diagnostic",today:"Azi",yesterday:"Ieri",dawn:"Dimineață",day:"Zi",golden:"După-amiază",dusk:"Amurg",night:"Noapte",quality:"Calitatea conexiunii",qm_hi:"Conexiune excelentă pentru streaming, apeluri video și lucru intensiv",qm_ok:"Conexiune bună pentru uz zilnic",qm_fair:"Conexiune corectă",qm_lo:"Conexiune de îmbunătățit",connTitle:"Conexiune detectată",connIsp:"Operator",connIp:"IP public",connCity:"Oraș",connCountry:"Țară",connServer:"Server de test",connRegion:"Regiune",connDetected:"Detectat",connUnavailable:"Indisponibil",connDetecting:"Se detectează...",connAuto:"automată",advisory:"Rezultat estimat pe baza serverului de test (Cloudflare). Poate varia față de Speedtest și alte servicii în funcție de server, rețea și dispozitiv.",estTime:"Timp estimat: ~{s} s"},
+  el:{dl:"Λήψη",ul:"Αποστολή",start:"Έναρξη διαγνωστικού",again:"Επανάληψη",prep:"Προετοιμασία διαγνωστικού...",pd:"Μέτρηση λήψης...",pu:"Μέτρηση αποστολής...",analyze:"Ανάλυση απόδοσης...",done:"Διαγνωστικό ολοκληρώθηκε",idle:"Πατήστε για έναρξη",ulwarn:"Αποτυχία μέτρησης αποστολής",ulwarnmsg:"Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.",hi:"Εξαιρετική σύνδεση",ok:"Καλή σύνδεση",fair:"Σωστή σύνδεση",lo:"Κακή σύνδεση",history:"Ιστορικό δοκιμών",current:"Τρέχον διαγνωστικό",clear:"Εκκαθάριση",empty:"Δεν έχουν γίνει διαγνωστικά",today:"Σήμερα",yesterday:"Χθες",dawn:"Πρωί",day:"Ημέρα",golden:"Απόγευμα",dusk:"Δειλινό",night:"Νύχτα",quality:"Ποιότητα σύνδεσης",qm_hi:"Εξαιρετική σύνδεση για streaming, βιντεοκλήσεις και εντατική εργασία",qm_ok:"Καλή σύνδεση για καθημερινή χρήση",qm_fair:"Σωστή σύνδεση",qm_lo:"Η σύνδεση χρειάζεται βελτίωση",connTitle:"Εντοπίστηκε σύνδεση",connIsp:"Πάροχος",connIp:"Δημόσια IP",connCity:"Πόλη",connCountry:"Χώρα",connServer:"Διακομιστής δοκιμής",connRegion:"Περιοχή",connDetected:"Εντοπίστηκε",connUnavailable:"Μη διαθέσιμο",connDetecting:"Εντοπισμός...",connAuto:"αυτόματη",advisory:"Εκτιμώμενο αποτέλεσμα βάσει του διακομιστή δοκιμής (Cloudflare). Μπορεί να διαφέρει από το Speedtest και άλλες υπηρεσίες ανάλογα με τον διακομιστή, το δίκτυο και τη συσκευή.",estTime:"Εκτιμώμενος χρόνος: ~{s} δευτ."},
 };
 const PC={idle:'#c9a84c',download:'#00d4ff',upload:'#a855f7',done:'#10b981'};
 let lang='ca',phase='idle',busy=false;
@@ -553,9 +606,16 @@ function applyLang(l){
   document.getElementById('cr-lbl-dl').textContent=t.dl;
   document.getElementById('cr-lbl-ul').textContent=t.ul;
   document.getElementById('hist-empty-msg').textContent=t.empty;
+  document.getElementById('conn-title-txt').textContent=t.connTitle;
+  document.getElementById('conn-lbl-isp').textContent=t.connIsp;
+  document.getElementById('conn-lbl-ip').textContent=t.connIp;
+  document.getElementById('conn-lbl-city').textContent=t.connCity;
+  document.getElementById('conn-lbl-country').textContent=t.connCountry;
+  document.getElementById('conn-lbl-server').textContent=t.connServer;
+  document.getElementById('conn-lbl-region').textContent=t.connRegion;
   document.querySelectorAll('.lang-opt').forEach(b=>b.classList.toggle('active',b.dataset.code===l));
   if(phase==='idle')setStatus(t.idle,idleColor(),false);
-  updateBtn();renderHistory();updateHeroBadge();
+  updateBtn();renderHistory();updateHeroBadge();updateConnCard();updateEstimate();
 }
 const ddEl=document.getElementById('lang-dropdown');
 Object.entries(LANGS).forEach(([code,name])=>{
@@ -657,10 +717,23 @@ document.getElementById('clear-btn').onclick=()=>{saveH([]);document.getElementB
 // ══ NETWORK ENGINE ══
 function withTO(p,ms){return Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error('t')),ms))]);}
 
+// Mitjana retallada (descarta el 15% superior i inferior) per evitar que un pic puntual
+// o un buit de xarxa manipulin el resultat final. Amb poques mostres, fa mitjana simple.
+function robustAvg(samples){
+  if(!samples||!samples.length)return null;
+  const sorted=[...samples].sort((a,b)=>a-b);
+  if(sorted.length<4)return sorted.reduce((a,b)=>a+b,0)/sorted.length;
+  const cut=Math.max(1,Math.floor(sorted.length*0.15));
+  const trimmed=sorted.slice(cut,sorted.length-cut);
+  const use=trimmed.length?trimmed:sorted;
+  return use.reduce((a,b)=>a+b,0)/use.length;
+}
+
 async function measureDownload(deadline,onLive){
   const URLS=['https://speed.cloudflare.com/__down?bytes=10000000','https://speed.cloudflare.com/__down?bytes=25000000','https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js','https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'];
   const testStart=performance.now(),WARMUP=1500;
-  let mBytes=0,mStart=null,wBytes=0,wStart=performance.now(),idx=0;
+  let totalBytes=0,measureStart=null,wBytes=0,wStart=null,idx=0;
+  const samples=[];
   const ctrl=new AbortController();
   const cancelTimer=setTimeout(()=>ctrl.abort(),Math.max(500,deadline-performance.now()+400));
   async function stream(url){
@@ -673,11 +746,22 @@ async function measureDownload(deadline,onLive){
           if(performance.now()>=deadline){try{rdr.cancel();}catch{}break;}
           const{done,value}=await rdr.read();if(done)break;
           const now=performance.now();
-          if(now-testStart>WARMUP){if(!mStart)mStart=now;mBytes+=value.length;wBytes+=value.length;}
-          const dt=(now-wStart)/1000;
-          if(dt>=0.2&&now-testStart>WARMUP){onLive(wBytes*8/dt/1e6);wBytes=0;wStart=now;}
+          if(now-testStart>WARMUP){
+            if(measureStart===null)measureStart=now;
+            if(wStart===null)wStart=now;
+            totalBytes+=value.length;wBytes+=value.length;
+            const dt=(now-wStart)/1000;
+            if(dt>=0.2){
+              const mbps=wBytes*8/dt/1e6;
+              samples.push(mbps);onLive(mbps);
+              wBytes=0;wStart=now;
+            }
+          }
         }
-      }else{const buf=await r.arrayBuffer();if(performance.now()-testStart>WARMUP)mBytes+=buf.byteLength;}
+      }else{
+        const buf=await r.arrayBuffer();
+        if(performance.now()-testStart>WARMUP){if(measureStart===null)measureStart=performance.now();totalBytes+=buf.byteLength;}
+      }
     }catch{}
   }
   const p1=stream(URLS[0]);
@@ -686,25 +770,39 @@ async function measureDownload(deadline,onLive){
   while(performance.now()<deadline-600){await new Promise(r=>setTimeout(r,400));if(performance.now()<deadline-600)stream(URLS[(++idx)%URLS.length]);}
   await Promise.race([Promise.allSettled([p1,p2]),new Promise(r=>setTimeout(r,Math.max(400,deadline-performance.now()+400)))]);
   clearTimeout(cancelTimer);
-  const dt=mStart?(performance.now()-mStart)/1000:(performance.now()-testStart)/1000;
-  return(mBytes>0&&dt>0.5)?+(mBytes*8/dt/1e6).toFixed(2):null;
+  const robust=robustAvg(samples);
+  if(robust!==null)return+robust.toFixed(2);
+  if(measureStart!==null&&totalBytes>0){
+    const dt=(performance.now()-measureStart)/1000;
+    if(dt>0.5)return+(totalBytes*8/dt/1e6).toFixed(2);
+  }
+  return null;
 }
 
 async function measureUpload(deadline,onLive){
   const URLS=['https://speed.cloudflare.com/__up','https://httpbin.org/post'];
-  const CHUNK=1_000_000;
-  let total=0,start=performance.now(),fails=0,idx=0;
+  const MAX_CHUNK=8_000_000;
+  let chunk=1_000_000,total=0,start=performance.now(),fails=0,idx=0;
+  const samples=[];
   const ctrl=new AbortController();
   const masterTimer=setTimeout(()=>ctrl.abort(),Math.max(500,deadline-performance.now()+300));
   while(performance.now()<deadline-400){
     const remaining=deadline-performance.now();
     if(remaining<400)break;
-    const data=new Uint8Array(CHUNK);
+    const data=new Uint8Array(chunk);
+    const t0=performance.now();
     try{
       await fetch(URLS[idx%URLS.length],{method:'POST',body:data.buffer,signal:ctrl.signal,headers:{'Content-Type':'application/octet-stream'}});
-      total+=CHUNK;fails=0;idx=0;
+      const dtChunk=(performance.now()-t0)/1000;
+      total+=chunk;fails=0;idx=0;
+      if(dtChunk>0.05)samples.push(chunk*8/dtChunk/1e6);
       const dt=(performance.now()-start)/1000;
-      if(dt>0)onLive(total*8/dt/1e6);
+      if(dt>0){
+        const avgMbps=total*8/dt/1e6;
+        onLive(avgMbps);
+        // connexió ràpida: augmenta la mida de mostra per saturar millor el canal
+        if(avgMbps>50&&chunk<MAX_CHUNK)chunk=Math.min(chunk*2,MAX_CHUNK);
+      }
     }catch(e){
       if(ctrl.signal.aborted)break;
       if(++fails>=4)break;
@@ -714,7 +812,93 @@ async function measureUpload(deadline,onLive){
   }
   clearTimeout(masterTimer);
   const dt=(performance.now()-start)/1000;
-  return total>0&&dt>0.5?+(total*8/dt/1e6).toFixed(2):null;
+  if(total<=0||dt<=0.5)return null;
+  const robust=robustAvg(samples);
+  return robust!==null?+robust.toFixed(2):+(total*8/dt/1e6).toFixed(2);
+}
+
+// ══ CONNECTION DETECTION ══
+// Informativa, independent del test: mai bloqueja ni fa fallar el diagnòstic.
+let connState={status:'pending',isp:null,ip:null,city:null,country:null,colo:null};
+function countryName(code){
+  if(!code)return null;
+  try{return new Intl.DisplayNames([lang],{type:'region'}).of(code.toUpperCase())||code;}catch{return code;}
+}
+async function detectConnection(){
+  const data={isp:null,ip:null,city:null,country:null,colo:null};
+  try{
+    const r=await withTO(fetch('https://speed.cloudflare.com/cdn-cgi/trace',{cache:'no-store'}),3500);
+    const txt=await r.text();
+    txt.split('\n').forEach(line=>{
+      const i=line.indexOf('=');if(i<0)return;
+      const k=line.slice(0,i),v=line.slice(i+1);
+      if(k==='ip')data.ip=v;
+      if(k==='loc')data.country=v;
+      if(k==='colo')data.colo=v;
+    });
+  }catch{}
+  try{
+    const r=await withTO(fetch('https://ipapi.co/json/',{cache:'no-store'}),3500);
+    const j=await r.json();
+    if(!j.error){
+      data.isp=j.org||null;
+      data.city=j.city||null;
+      if(!data.ip)data.ip=j.ip||null;
+      if(!data.country)data.country=j.country_code||null;
+    }
+  }catch{
+    try{
+      const r=await withTO(fetch('https://ipwho.is/',{cache:'no-store'}),3500);
+      const j=await r.json();
+      if(j&&j.success!==false){
+        data.isp=(j.connection&&j.connection.isp)||null;
+        data.city=j.city||null;
+        if(!data.ip)data.ip=j.ip||null;
+        if(!data.country)data.country=j.country_code||null;
+      }
+    }catch{}
+  }
+  connState=(data.ip||data.isp||data.colo)?{status:'ok',...data}:{status:'fail',...data};
+  updateConnCard();
+  return connState;
+}
+function updateConnCard(){
+  const t=T[lang];
+  const dot=document.getElementById('conn-status-dot'),txt=document.getElementById('conn-status-text');
+  dot.classList.remove('pending','ok');
+  if(connState.status==='pending'){dot.classList.add('pending');txt.textContent=t.connDetecting;}
+  else if(connState.status==='ok'){dot.classList.add('ok');txt.textContent=t.connDetected;}
+  else{txt.textContent=t.connUnavailable;}
+  document.getElementById('conn-isp').textContent=connState.isp||t.connUnavailable;
+  document.getElementById('conn-ip').textContent=connState.ip||t.connUnavailable;
+  document.getElementById('conn-city').textContent=connState.city||t.connUnavailable;
+  document.getElementById('conn-country').textContent=connState.country?(countryName(connState.country)||connState.country):t.connUnavailable;
+  document.getElementById('conn-region').textContent=connState.colo||t.connAuto;
+}
+
+// ══ PROGRESS STEPS ══
+const STEP_ORDER=['prep','download','upload','analyze'];
+const STEP_COLOR={prep:PC.idle,download:PC.download,upload:PC.upload,analyze:PC.done};
+function setProgressStep(step){
+  const idx=STEP_ORDER.indexOf(step);
+  STEP_ORDER.forEach((s,i)=>{
+    const el=document.getElementById('pstep-'+s);
+    el.classList.remove('active');
+    if(step==='done'){el.style.background=PC.done;el.style.opacity='1';}
+    else if(i<idx){el.style.background=STEP_COLOR[s];el.style.opacity='.45';}
+    else if(i===idx){el.style.background=STEP_COLOR[s];el.style.opacity='1';el.classList.add('active');}
+    else{el.style.background='';el.style.opacity='';}
+  });
+}
+function clearProgressSteps(){STEP_ORDER.forEach(s=>{const el=document.getElementById('pstep-'+s);el.classList.remove('active');el.style.background='';el.style.opacity='';});}
+
+// ══ TIME ESTIMATE ══
+const PREP_MS=500,ANALYZE_MS=600;
+function estTotalSeconds(){return Math.round((PREP_MS+DUR+DUR+ANALYZE_MS)/1000);}
+function updateEstimate(){
+  const el=document.getElementById('time-estimate');
+  if(!el)return;
+  el.textContent=busy?'':(T[lang].estTime||'').replace('{s}',estTotalSeconds());
 }
 
 // ══ RUNNER ══
@@ -738,19 +922,21 @@ async function runTest(){
   if(busy)return;busy=true;
   ['download','upload'].forEach(n=>setPV(n,'—'));
   document.getElementById('quality').classList.remove('show');
+  document.getElementById('disclaimer').classList.remove('show');
   document.getElementById('warn-box').classList.remove('show');
   document.getElementById('unit-ul').textContent='Mbps';
-  setTarget(0,'#c9a84c');stopTimer();
+  setTarget(0,'#c9a84c');stopTimer();clearProgressSteps();updateEstimate();
   lastResult={dl:null,ul:null};
+  if(connState.status!=='ok')detectConnection();
 
   // PREP
-  phase='prep';
+  phase='prep';setProgressStep('prep');
   setAmbient(PC.idle);activatePrimary('');showSpinner(true,PC.idle);resetBtn();
   setStatus(T[lang].prep,idleColor(),true);
-  await new Promise(r=>setTimeout(r,500));
+  await new Promise(r=>setTimeout(r,PREP_MS));
 
   // DOWNLOAD
-  phase='download';const cd=PC.download;
+  phase='download';setProgressStep('download');const cd=PC.download;
   setAmbient(cd);activatePrimary('download');showSpinner(true,cd);setDot('download');
   document.getElementById('start-btn').style.background=`linear-gradient(135deg,${cd}dd,${cd}88)`;
   document.getElementById('start-btn').style.color='#07080f';
@@ -765,7 +951,7 @@ async function runTest(){
   setTarget(0,cd);await new Promise(r=>setTimeout(r,450));stopTimer();
 
   // UPLOAD
-  phase='upload';const cu=PC.upload;
+  phase='upload';setProgressStep('upload');const cu=PC.upload;
   setAmbient(cu);activatePrimary('upload');showSpinner(true,cu);setDot('upload');
   document.getElementById('start-btn').style.background=`linear-gradient(135deg,${cu}dd,${cu}88)`;
   setStatus(T[lang].pu,cu,true);startTimer(cu,DUR);
@@ -780,14 +966,14 @@ async function runTest(){
   setTarget(0,cu);await new Promise(r=>setTimeout(r,450));stopTimer();
 
   // ANALYZE
-  phase='analyze';const cA=PC.done;
+  phase='analyze';setProgressStep('analyze');const cA=PC.done;
   setAmbient(cA);activatePrimary('');showSpinner(true,cA);
   document.getElementById('start-btn').style.background=`linear-gradient(135deg,${cA}dd,${cA}88)`;
   setStatus(T[lang].analyze,cA,true);
-  await new Promise(r=>setTimeout(r,600));
+  await new Promise(r=>setTimeout(r,ANALYZE_MS));
 
   // DONE
-  phase='done';const cD=PC.done;
+  phase='done';setProgressStep('done');const cD=PC.done;
   setAmbient(cD);activatePrimary('');showSpinner(false,cD);resetBtn();
   setStatus(T[lang].done+' ✓',cD,false);
   if(dlResult!==null){
@@ -798,12 +984,15 @@ async function runTest(){
     qdot.style.boxShadow=`0 0 10px ${qc}`;
     document.getElementById('quality-sublabel').textContent=T[lang].quality;
     const qtxt=document.getElementById('quality-text');
-    qtxt.textContent=T[lang][lev]||'—';
+    qtxt.textContent=T[lang]['qm_'+lev]||T[lang][lev]||'—';
     qtxt.style.color=qc;
     document.getElementById('quality').classList.add('show');
+    const disc=document.getElementById('disclaimer');
+    disc.textContent=T[lang].advisory;
+    disc.classList.add('show');
   }
   addR(lastResult);renderHistory();
-  updateBtn();busy=false;
+  updateBtn();busy=false;updateEstimate();
 }
 
 // ══ TIME THEME (5 franges) ══
@@ -846,6 +1035,7 @@ function applyTimeTheme(){
 document.getElementById('start-btn').onclick=runTest;
 try{const saved=localStorage.getItem('shpulse_lang');applyLang(saved&&T[saved]?saved:'ca');}catch{applyLang('ca');}
 renderHistory();
+detectConnection();
 try{
   const mb=new Blob([JSON.stringify({name:"SH Pulse",short_name:"SH Pulse",start_url:".",display:"standalone",background_color:"#07080f",theme_color:"#07080f"})],{type:'application/json'});
   const ml=document.createElement('link');ml.rel='manifest';ml.href=URL.createObjectURL(mb);document.head.appendChild(ml);
