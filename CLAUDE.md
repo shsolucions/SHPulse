@@ -24,10 +24,10 @@ SHPulse/
 - **Historial:** `localStorage` clau `shpulse_v3` (fins a 20 tests)
 
 ## Metodologia de mesura
-Basada en estàndards **Ookla + Cloudflare + RFC 6349**:
-- **Ping/Jitter:** mostres cada 350ms durant 10s → mediana + desviació absoluta entre mostres consecutives
+Basada en estàndards **Ookla + Cloudflare + RFC 6349**. Només es mesuren baixada i pujada (no ping ni jitter):
 - **Descàrrega:** 2 connexions TCP paral·leles + descarta primer 1.5s (TCP slow-start) → 10s
 - **Pujada:** chunks de 2MB en bucle via XHR → 10s
+- **Qualitat general:** calculada només amb baixada i pujada (excel·lent ≥300/100 Mbps, bona ≥100/30, correcta ≥30/10, millorable per sota)
 - **Endpoints:** speed.cloudflare.com (principal) + fallbacks httpbin.org, jsdelivr, cdnjs
 
 ## Idiomes suportats (12)
