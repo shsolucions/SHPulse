@@ -2,7 +2,7 @@
 <html lang="ca" data-theme="night">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>SH Pulse · Network Intelligence</title>
@@ -287,22 +287,197 @@ html.switching *{transition:background-color .5s ease,color .5s ease,border-colo
   .app-pill{flex:1 1 calc(50% - 5px);max-width:none}
   #footer-apps{justify-content:flex-start}
 }
+
+/* Reference dashboard: luminous instruments on a light panel, framed by the navy brand rail. */
+:root, :root[data-theme]{
+  --bg:#e6eeff; --sky:#dce7ff; --card:#fcfdff; --text:#0a1333; --text-dim:#30416b; --text-muted:#536489;
+  --surface:#eff3ff; --surface2:#e1e9fa; --border:#d2dcf2; --gold:#295ae2; --gold2:#384cc3;
+  --gold-dim:#e6edff; --cyan:#105fea; --purple:#8225ed; --green:#128349;
+  --btn-bg:linear-gradient(112deg,#008aff 0%,#1748ff 48%,#8300e5 100%); --btn-text:white;
+  --panel-shadow:0 3px 5px #6488ce26,0 7px 22px #567ecc19;
+  --rail:clamp(210px,21.5vw,328px); --rail-glow:#21347c;
+}
+:root[data-theme="night"]{--bg:#dde6f8;--sky:#c5d5f3;--rail-glow:#112c69}
+:root[data-theme="dawn"]{--bg:#e4f2f8;--sky:#d1e8fa;--rail-glow:#10547c}
+:root[data-theme="golden"]{--bg:#faf0e7;--sky:#ecdef0;--rail-glow:#573768}
+:root[data-theme="dusk"]{--bg:#eee9fb;--sky:#dfdcfa;--rail-glow:#3a276f}
+body{display:block;background:#061635;color:var(--text);font-family:Inter,"Segoe UI",Arial,sans-serif}
+.symbol-bank{position:absolute;width:0;height:0;overflow:hidden}
+.ico,.top-wifi,.connection-wifi,.quality-award{display:block;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+#app{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);align-items:stretch;width:100%;max-width:none;padding:0;overflow:clip;min-height:100vh;background:#061638}
+#ambient{display:none}
+.rail{position:sticky;top:0;isolation:isolate;overflow:hidden;align-self:start;min-height:100vh;padding:clamp(20px,2.1vw,38px) clamp(13px,1.3vw,22px);display:flex;flex-direction:column;align-items:stretch;color:#fff;background:radial-gradient(ellipse at 38% -5%,#0a4b8f,transparent 35%),radial-gradient(ellipse at 110% 100%,var(--rail-glow),transparent 54%),linear-gradient(165deg,#031432,#061331 45%,#092a5a)}
+.rail::after{content:"";position:absolute;z-index:-1;pointer-events:none;bottom:-38px;left:-15%;width:145%;height:100px;border-radius:49%;transform:rotate(8deg);border-top:1px solid #6b81ff;box-shadow:0 -4px 0 #453fb7,0 -8px 0 #254e95,0 -13px 0 #094e9f,0 -18px 0 #18417e,0 -23px 0 #103874,0 -28px 0 #13336a}
+.rail-brand{text-align:center;padding:0 0 clamp(24px,3vw,50px)}
+.monogram{display:block;width:100%;height:auto;overflow:visible}
+.rail-brand .monogram{width:88%;max-width:235px;aspect-ratio:2/1;margin:auto;filter:drop-shadow(0 3px 3px #010817) drop-shadow(0 0 9px #1975f247)}
+.rail-brand strong{display:block;font-size:clamp(30px,3.55vw,55px);line-height:1.12;letter-spacing:-.055em;font-weight:840;text-shadow:0 3px 4px #0009}
+.rail-brand strong b,.brand-name b{color:#0083ff}
+.rail-brand small{display:flex;align-items:center;justify-content:center;gap:8px;font-size:clamp(12px,1.4vw,20px);letter-spacing:-.035em;margin-top:3px}
+.rail-brand small::before,.rail-brand small::after{content:"";display:block;width:22px;height:2px;background:#a23cff}
+.rail-nav{display:grid}
+.rail-nav a{color:white;display:flex;align-items:center;gap:15px;min-height:clamp(44px,3.9vw,59px);padding:10px clamp(13px,1.5vw,26px);border-bottom:1px solid #6983bf55;text-decoration:none;font-size:clamp(15px,1.35vw,21px);font-weight:550;letter-spacing:-.026em}
+.rail-nav .ico{width:25px;height:25px}
+.rail-nav a:hover,.rail-nav a:focus-visible{background:#ffffff17}
+.rail-nav a[aria-current]{background:linear-gradient(105deg,#0076fa,#2d4dff 46%,#9a20e7);border:1px solid #6ba2ff;border-radius:12px;box-shadow:inset 0 2px 6px #ffffff42,0 4px 13px #0004}
+.router-tile{margin:clamp(30px,7vh,78px) 7px 55px;text-align:center;padding:12px 8px 21px;border:1px solid #426ed0;border-radius:19px;background:radial-gradient(ellipse at 84% 105%,#412191,transparent 62%),linear-gradient(125deg,#0b3165,#091e49 70%);box-shadow:inset 0 1px 5px #7996fb19}
+.router-image{width:min(88%,210px);display:block;aspect-ratio:230/125;margin:auto;filter:drop-shadow(0 4px 7px #082680)}
+.router-tile strong,.router-tile small{display:block}.router-tile strong{font-size:clamp(15px,1.4vw,21px)}.router-tile small{margin-top:5px;color:#cfddff;font-size:12px}
+.workspace{isolation:isolate;min-width:0;min-height:100vh;border-radius:28px 0 0 28px;background:radial-gradient(ellipse at 55% 40%,#fafaff 0%,transparent 66%),linear-gradient(130deg,var(--sky),var(--bg) 42%,#e0eaff);padding-bottom:18px}
+:root[data-theme] #topbar{padding:10px clamp(18px,3.5vw,56px);height:clamp(62px,5.4vw,84px);border-radius:28px 0 0 0;background:#fafaffee;border:0;border-bottom:1px solid #cfdbf5;box-shadow:0 3px 11px #587fd21b;backdrop-filter:none}
+#logo-wrap{text-decoration:none;gap:clamp(7px,1.1vw,16px);min-width:0;color:var(--text)}
+#logo-wrap .monogram{width:clamp(69px,8.2vw,126px);height:clamp(39px,4vw,63px);filter:drop-shadow(0 1px 2px #4d619477)}
+.brand-name{white-space:nowrap;font-size:clamp(19px,2.1vw,32px);font-weight:840;letter-spacing:-.055em}
+.brand-caption{border-left:1px solid #7d88ba;padding-left:clamp(12px,1.4vw,24px);font-size:clamp(13px,1.26vw,19px);color:#354677}
+.top-wifi{color:#2c59cd;opacity:.8;width:30px;height:30px}
+button:focus-visible,a:focus-visible{outline:3px solid #2781ff;outline-offset:3px}
+.dashboard,#footer{width:min(100%,1500px);margin:0 auto;padding:0 clamp(16px,2.15vw,36px)}
+#hero{width:100%;padding:clamp(18px,1.65vw,27px) 0 14px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:12px}
+#hero-tagline{font-size:clamp(24px,2.45vw,40px);font-weight:770;line-height:1.12;letter-spacing:-.055em;color:var(--text);margin:0}
+#hero-caps{font-size:clamp(13px,1.25vw,19px);font-weight:450;line-height:1.5;letter-spacing:-.02em;color:var(--text-dim);text-transform:none;margin-top:4px}
+.hero-controls{display:flex;align-items:center;gap:9px;position:relative;z-index:11}
+#hero{position:relative;z-index:9}
+#lang-btn,#hero-badge{min-height:39px;border:1px solid #fff;box-shadow:var(--panel-shadow);background:#fafbff;border-radius:22px;margin:0;padding:8px 14px;color:#273d74;font-family:inherit;font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;white-space:nowrap}
+#lang-btn svg:first-child{width:17px;height:17px}
+#lang-dropdown{background:#fff;box-shadow:var(--panel-shadow);border-color:var(--border)}
+.time-symbol::before{content:"☀";color:#ee9120;font-size:20px;line-height:1}
+[data-theme="night"] .time-symbol::before,[data-theme="dusk"] .time-symbol::before{content:"☾";color:#7050ca}
+.workbench{display:grid;grid-template-columns:minmax(0,.98fr) minmax(0,1.22fr) minmax(0,1fr);align-items:center;gap:clamp(10px,1.3vw,22px);padding:4px 0 13px}
+#conn-card,.pcard,#quality,#history-section,#footer{border:1px solid #fff;border-radius:19px;background:linear-gradient(135deg,#fff,#f8f9ff);box-shadow:var(--panel-shadow)}
+:root[data-theme] #conn-card{width:100%;padding:clamp(13px,1.3vw,23px);margin:0;min-width:0;box-shadow:var(--panel-shadow)}
+.connection-head{display:flex;align-items:center;justify-content:space-between}
+.connection-wifi{width:39px;height:32px;color:#0566ff;stroke-width:2.6}
+#conn-status-badge{color:#41557b;background:#e8eefb;border-radius:20px;padding:5px 8px;font-size:10px;text-transform:none}
+#conn-status-badge:has(.ok){color:#116530;background:#c8f3ce}
+#conn-title-txt,#history-title,#quality-sublabel{font-size:clamp(16px,1.4vw,22px);line-height:1.22;font-weight:740;letter-spacing:-.04em;text-transform:none;color:var(--text)}
+#conn-title-txt{margin:4px 0 8px}
+.facts>div{display:grid;grid-template-columns:29px minmax(0,1fr);gap:1px 9px;align-items:center;padding:7px 0;border-top:1px solid #dfe6f5}
+.facts .ico{grid-row:span 2;width:28px;height:28px;background:#eaf0ff;padding:5px;border-radius:50%;color:#3856a3}
+.facts dt{font-size:12px;color:var(--text-dim);line-height:1.2}
+.facts dd,#conn-isp{font-size:clamp(13px,1.16vw,18px);font-weight:650;color:var(--text);line-height:1.15;overflow-wrap:anywhere;white-space:normal}
+.test-panel{display:flex;flex-direction:column;align-items:center;min-width:0;text-align:center}
+#gauge-section{padding:0;width:100%}#gauge-wrap{width:100%;max-width:460px}svg#gauge{overflow:visible}
+:root[data-theme] #g-track{stroke:url(#dial-track);stroke-width:15;filter:drop-shadow(0 2px 3px #668cf390)}
+.arc-sheen{opacity:.58;pointer-events:none}.arc-gloss{opacity:.35;pointer-events:none}
+#needle-body[fill="#c9a84c"]{fill:#1280ff}
+#g-fill{stroke-width:7}#g-wide{opacity:.13}
+:root[data-theme] #ticks-g text{fill:#344882;font-size:9px;font-weight:700}
+:root[data-theme] #ticks-g line{stroke:#525f9b}
+#dial-label,#speed-val,:root[data-theme] #speed-val{fill:var(--text);font-family:inherit;letter-spacing:-.045em}
+.dial-unit{fill:#37497a;letter-spacing:-.035em}
+#dd,#du{display:none}
+.divider{display:none}
+#btn-wrap{order:1;margin:7px 0 0}
+#start-btn{background:var(--btn-bg);color:white;box-shadow:inset 0 2px 4px #fff5,0 3px 9px #3456c849;border:1px solid #fff;border-radius:15px;justify-content:center;min-height:45px;padding:9px 16px;width:94%;max-width:340px;font:700 clamp(15px,1.35vw,21px)/1.2 "Segoe UI",Arial,sans-serif;text-transform:none;letter-spacing:-.025em}
+#start-btn:hover{transform:translateY(-1px)}
+#progress-steps,#timer-wrap{order:2;width:78%;margin:5px 0 0}
+#status{order:3;min-height:0;margin:3px 0 0;text-transform:none;letter-spacing:0;font-size:11px}
+#time-estimate{order:4;min-height:0;margin:3px 0;color:var(--text-muted);font-size:11px}
+.test-panel:not(:has(#spinner[style*="flex"])) :is(#timer-wrap,#progress-steps){display:none}
+#warn-box{order:5;width:100%;margin:7px 0 0}
+#warn-box :is(#wt,#wm){color:#775019 !important}
+#primary-cards{width:100%;margin:0;grid-template-columns:minmax(0,1fr);gap:12px}
+:root[data-theme] .pcard{min-width:0;display:grid;grid-template-columns:auto auto minmax(0,1fr);grid-template-rows:auto auto;align-content:center;align-items:baseline;gap:2px 5px;text-align:left;padding:clamp(12px,1.4vw,23px);min-height:95px;box-shadow:var(--panel-shadow)}
+.pcard-icon-wrap{grid-row:1/3;align-self:center;display:grid;place-items:center;width:clamp(36px,3.6vw,57px);height:clamp(36px,3.6vw,57px);background:#e5edff;color:#0762ff;border-radius:50%;margin:0 7px 0 0}
+#icon-ul{background:#f0e5ff;color:#861cf2}
+.pcard-icon-wrap svg{width:52%;height:52%;opacity:1 !important;stroke-width:2.5}
+.pcard-label{grid-column:2/4;font-size:clamp(13px,1.15vw,18px);font-weight:700;color:var(--text);letter-spacing:-.025em;text-transform:none;margin:0;overflow-wrap:anywhere}
+.pcard-value{grid-column:2;display:block;min-height:0;font-size:clamp(25px,2.35vw,39px);line-height:1.1;color:var(--text) !important;letter-spacing:-.05em;position:relative}
+.pcard-unit{grid-column:3;letter-spacing:-.035em;margin:0;color:var(--text-dim);font-size:clamp(12px,1.2vw,18px)}
+#quality,#quality.show{display:flex;width:100%;min-height:66px;gap:13px;margin:0;padding:13px 21px}
+.quality-award{width:37px;height:37px;color:#6652dc;padding:5px;background:#e8edff;border-radius:50%}
+#quality-dot{display:none}#quality.show #quality-dot{display:block;order:2}
+#quality:not(.show) #quality-text,#quality.show #quality-empty{display:none}
+#quality-text,#quality-empty{font-size:13px;color:var(--text-dim);font-weight:500;line-height:1.4}
+#disclaimer{width:100%;font-size:11px;opacity:1}
+#history-section{width:100%;padding:16px 21px;margin:14px 0}
+#history-header{margin-bottom:10px}#history-title{color:var(--text);gap:8px}#history-title svg{width:18px;height:18px;color:#34569b}
+#clear-btn{font-size:12px;color:#475f8f}
+#current-result{border-radius:12px;margin:0 0 8px;padding:10px 12px}
+#history-list{gap:6px}.hist-empty{padding:14px;background:#f1f5ff;border-radius:10px;color:#526486}
+#current-result.show + #history-list:not(:has(.hist-item)){display:none}
+#footer{width:auto;margin:0 clamp(16px,2.15vw,36px);padding:13px 20px;display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px}
+#footer-apps-label{font-size:12px;font-weight:780;letter-spacing:.03em;color:var(--text);margin:0}
+#footer-apps{flex:1;justify-content:flex-start}.app-pill{padding:7px 10px;max-width:125px}
+#footer-research{margin:0;color:var(--text-muted);opacity:1}
+@media(min-width:1650px){.workspace{display:flex;flex-direction:column}.dashboard{width:100%}}
+@media(max-width:1150px) and (min-width:801px){
+  :root[data-theme]{--rail:190px}.rail-nav a{font-size:15px}
+  .workbench{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}
+  #primary-cards{grid-column:1/-1;grid-template-columns:1fr 1fr}.pcard{min-height:72px}
+  #hero{flex-wrap:wrap}.hero-controls{margin-left:auto}
+}
+@media(max-width:800px){
+  #app{display:block}.rail{display:none}.workspace{border-radius:0}
+  :root[data-theme] #topbar{border-radius:0}.workbench{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)}
+  #primary-cards{grid-column:1/-1;grid-template-columns:1fr 1fr}
+  #hero{flex-wrap:wrap}.hero-controls{margin-left:auto}
+}
+@media(max-width:570px){
+  #hero{display:block;padding:18px 0 12px}.hero-controls{margin:10px 0 0;justify-content:flex-start}
+  .brand-caption{font-size:11px;padding-left:9px}.top-wifi{width:22px}
+  .workbench{display:flex;flex-direction:column;gap:12px}.test-panel{align-self:stretch}
+  #conn-card .facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px}
+  .facts>div{grid-template-columns:20px minmax(0,1fr);gap:0 5px}.facts .ico{width:21px;height:21px;padding:3px}
+  #gauge-wrap{max-width:355px}#primary-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  :root[data-theme] .pcard{grid-template-columns:auto 1fr;min-height:85px;gap:3px}
+  .pcard-icon-wrap{grid-column:1;grid-row:1;width:25px;height:25px;margin:0 2px 0 0}
+  .pcard-label{grid-column:2;grid-row:1;align-self:center}.pcard-value{grid-column:1;grid-row:2}.pcard-unit{grid-column:2;grid-row:2}
+  #footer{display:block}#footer-apps-label,#footer-research{margin:5px 0}#footer-apps{flex-wrap:wrap;gap:4px}
+  .hist-item{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto !important;animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}}
+
 </style>
 </head>
 <body>
-<div id="app">
-<div id="ambient"></div>
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="symbol-bank">
+  <defs>
+    <linearGradient id="letter" x2=".28" y2="1"><stop stop-color="#b8ffff"/><stop offset=".18" stop-color="#00d9ff"/><stop offset=".63" stop-color="#0086ef"/><stop offset="1" stop-color="#0041bb"/></linearGradient>
+    <linearGradient id="metal" x2=".85" y2=".6"><stop stop-color="#095af4"/><stop offset=".28" stop-color="#39faff"/><stop offset=".49" stop-color="#edfaff"/><stop offset=".67" stop-color="#5981ff"/><stop offset="1" stop-color="#ba36ff"/></linearGradient>
+    <radialGradient id="face" cx=".28" cy=".2" r=".95"><stop stop-color="#197edc"/><stop offset=".45" stop-color="#00295a"/><stop offset=".73" stop-color="#061331"/><stop offset="1" stop-color="#713be9"/></radialGradient>
+    <linearGradient id="stem"><stop stop-color="#071831"/><stop offset=".58" stop-color="#15346d"/><stop offset="1" stop-color="#06132c"/></linearGradient>
+    <symbol id="sh-radar" viewBox="0 0 230 115">
+      <g transform="translate(2 2)">
+        <circle cx="163" cy="56" r="51" fill="url(#face)" stroke="#071a4f" stroke-width="8"/>
+        <circle cx="163" cy="53" r="50" fill="none" stroke="url(#metal)" stroke-width="7"/>
+        <circle cx="163" cy="57" r="43" fill="url(#face)" stroke="url(#metal)" stroke-width="4"/>
+        <circle cx="163" cy="62" r="34" fill="none" stroke="url(#metal)" stroke-width="2.7"/>
+        <path d="m160 66 32-27-23 32z" fill="#ecf7ff"/><circle cx="164" cy="66" r="6.5" fill="#fff"/>
+        <g fill="#00193f" transform="translate(1 4)"><path id="letter-s" d="M57 28C49 19 39 17 29 18 12 19 4 28 4 41c0 12 8 18 24 22 10 3 14 5 14 10 0 4-4 7-11 7-9 0-17-4-24-11L0 82c8 9 20 14 33 14 18 0 29-10 29-24 0-12-9-19-24-23-11-3-15-5-15-10 0-4 4-7 10-7 7 0 14 3 20 9z"/><path id="letter-h" d="M68 19h19v28h22V19h20v75h-20V65H87v29H68z"/></g>
+        <g fill="url(#letter)" stroke="#52caff" stroke-width=".8"><use href="#letter-s"/><use href="#letter-h"/></g>
+        <rect x="106" y="18" width="23" height="77" rx="4" fill="url(#stem)" stroke="#15589c"/>
+        <g fill="white" transform="translate(111 25) scale(.54)"><path d="M0 3l9-1v9H0zm11-1L22 0v11H11zM0 13h9v9l-9-1zm11 0h11v11l-11-2z"/>
+        <path transform="translate(0 37)" d="M16 5c1-3 1-4 1-5-3 0-5 2-6 5 2 1 4 0 5 0zm2 1c-3-1-4 1-6 1-2 0-4-2-7 0-5 3-4 11 0 16 1 2 3 2 5 1s3-1 5 0c3 1 5-2 7-6-5-2-6-8-1-10z"/>
+        <g transform="translate(0 77)"><path d="M2 12a9 9 0 0 1 18 0zm1 2h16v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M5 1l3 5m9-5-3 5M0 15v6m22-6v6M7 21v5m8-5v5" fill="none" stroke="white" stroke-width="2"/></g></g>
+      </g>
+    </symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 8a16 16 0 0 1 20 0M5.5 12a10.7 10.7 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m2 11 10-9 10 9M5 9v12h5v-6h4v6h5V9"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15 15 7 7"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 19v-5m6 5V8m6 11V5m6 14V2" stroke-width="3.3"/></symbol>
+    <symbol id="i-net" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M19 10c0 5-7 12-7 12S5 15 5 10a7 7 0 0 1 14 0z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M6 7.5h2m-2 10h2"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6.5"/><path d="m7 14-2 8 5-3 2 3 2-3 5 3-2-8"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 2v12m-5-5 5 5 5-5M4 15v5h16v-5"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 15V3m-5 5 5-5 5 5M4 15v5h16v-5"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="router-art" viewBox="0 0 230 125">
+      <ellipse cx="115" cy="109" rx="79" ry="7" fill="#213cca"/>
+      <g fill="none" stroke-linecap="round"><path d="M91 18q24-18 48 0m-41 8q17-13 34 0m-26 8q9-7 18 0" stroke="#1b67c7" stroke-width="8"/><path d="M91 16q24-18 48 0m-41 8q17-13 34 0m-26 8q9-7 18 0" stroke="#80efff" stroke-width="5"/><circle cx="115" cy="42" r="3" fill="#83f7ff"/>
+      <path d="M57 83V37m117 46V37" stroke="#152553" stroke-width="6"/><path d="M56 82V37m117 45V37" stroke="url(#metal)" stroke-width="3"/></g>
+      <path d="m39 88 19-17h115l21 17v15l-6 4H44l-5-4z" fill="url(#face)" stroke="url(#metal)" stroke-width="2"/><path d="m40 87 20-15h112l20 15z" fill="#bdd5ff"/><path d="M46 91h142" stroke="#8debff" stroke-width="2"/><rect x="97" y="95" width="38" height="6" rx="3" fill="#040d29"/><path d="M103 98h3m5 0h4m6 0h6" stroke="#41d9ff" stroke-width="2"/>
+    </symbol>
+  </defs>
+</svg>
 
-<!-- TOPBAR -->
-<div id="topbar">
-  <div id="logo-wrap">
-    <div id="logo-badge"><span>SH</span></div>
-    <div id="brand-wrap">
-      <span id="brand-main">SH Pulse</span>
-      <span id="brand-sub">Network Intelligence</span>
-    </div>
-  </div>
-  <div style="position:relative">
+<div id="app"><div id="ambient"></div><aside class="rail"><div class="rail-brand"><svg class="monogram" aria-hidden="true" focusable="false"><use href="#sh-radar"/></svg>
+  <strong><b>SH</b> PULSE</strong><small>Network Intelligence</small></div>
+  <nav class="rail-nav"><a href="#hero"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-home"/></svg><span data-copy="home">Inici</span></a><a href="#diagnostic"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-search"/></svg><span data-copy="test">Diagnòstic</span></a><a href="#history-section"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-history"/></svg><span data-copy="past">Historial</span></a><a href="#conn-card"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-net"/></svg><span data-copy="net">Xarxa</span></a></nav>
+  <div class="router-tile"><svg class="router-image" aria-hidden="true" focusable="false"><use href="#router-art"/></svg><strong data-copy="test">Diagnòstic</strong><small>SH Pulse · Network Intelligence</small></div></aside><div class="workspace"><header id="topbar"><a id="logo-wrap" href="#hero" aria-label="SH Pulse"><svg class="monogram" aria-hidden="true" focusable="false"><use href="#sh-radar"/></svg><span class="brand-name"><b>SH</b> PULSE</span><span class="brand-caption">Network Intelligence</span></a>
+  <div class="top-tools"><svg class="ico top-wifi" aria-hidden="true" focusable="false"><use href="#i-wifi"/></svg></div></header><main class="dashboard"><section id="hero"><div><h1 id="hero-tagline">Diagnòstic de la teva connexió</h1>
+    <p id="hero-caps"></p></div><div class="hero-controls"><div style="position:relative">
     <button id="lang-btn">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <span id="lang-name">Català</span>
@@ -310,32 +485,13 @@ html.switching *{transition:background-color .5s ease,color .5s ease,border-colo
     </button>
     <div id="lang-dropdown"></div>
   </div>
-</div>
 
-<!-- HERO -->
-<div id="hero">
-  <p id="hero-tagline">Mesura el rendiment real de la teva connexió</p>
-  <div id="hero-caps">Baixada · Pujada · Rendiment</div>
-  <div id="hero-badge"><span id="hero-badge-dot"></span><span id="hero-time-label">Nit</span></div>
-</div>
-
-<!-- CONNECTION INFO -->
-<div id="conn-card">
-  <div id="conn-header">
-    <span id="conn-title">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
-      <span id="conn-title-txt">Connexió detectada</span>
-    </span>
-    <span id="conn-status-badge"><span id="conn-status-dot" class="pending"></span><span id="conn-status-text">—</span></span>
-  </div>
-  <div id="conn-isp">—</div>
-  <div id="conn-meta">—</div>
-</div>
-
-<!-- GAUGE -->
+    <div id="hero-badge"><span class="time-symbol" aria-hidden="true"></span><span id="hero-time-label"></span></div></div></section><div class="workbench"><section id="conn-card"><div class="connection-head"><svg class="ico connection-wifi" aria-hidden="true" focusable="false"><use href="#i-wifi"/></svg>
+    <span id="conn-status-badge"><span id="conn-status-dot"></span><span id="conn-status-text"></span></span></div>
+    <h2 id="conn-title-txt"></h2><dl class="facts"><div><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-wifi"/></svg><dt><span data-copy="isp">Operador</span></dt><dd id="conn-isp">—</dd></div><div><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-net"/></svg><dt><span data-copy="ip">IP pública</span></dt><dd id="conn-ip">—</dd></div><div><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg><dt><span data-copy="location">Ubicació</span></dt><dd id="conn-city">—</dd></div><div><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-server"/></svg><dt><span data-copy="server">Servidor</span></dt><dd id="conn-server">—</dd></div></dl></section><section id="diagnostic" class="test-panel"><!-- GAUGE -->
 <div id="gauge-section">
 <div id="gauge-wrap">
-  <svg id="gauge" viewBox="0 0 300 248">
+  <svg id="gauge" viewBox="21 28 258 182">
     <defs>
       <filter id="gf" x="-40%" y="-40%" width="180%" height="180%">
         <feGaussianBlur stdDeviation="6" result="b"/>
@@ -345,30 +501,26 @@ html.switching *{transition:background-color .5s ease,color .5s ease,border-colo
         <feGaussianBlur stdDeviation="14" result="b"/>
         <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
+      <linearGradient id="dial-track" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop stop-color="#035bff"/><stop offset=".2" stop-color="#00d1ff"/><stop offset=".48" stop-color="#147aff"/><stop offset=".73" stop-color="#6045fb"/><stop offset="1" stop-color="#9410ec"/>
+      </linearGradient>
+      <linearGradient id="rim-light" x2="0" y2="1"><stop stop-color="#dfffff"/><stop offset=".32" stop-color="#43f2ff"/><stop offset=".69" stop-color="#886fff"/><stop offset="1" stop-color="#c780ff"/></linearGradient>
       <radialGradient id="hub-g" cx="35%" cy="30%">
-        <stop offset="0%" stop-color="#e8c96a"/>
-        <stop offset="100%" stop-color="#6b4510"/>
+        <stop offset="0%" stop-color="#8baaff"/>
+        <stop offset="100%" stop-color="#3d4bce"/>
       </radialGradient>
     </defs>
-    <circle cx="150" cy="146" r="120" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
-    <circle cx="150" cy="146" r="114" fill="none" stroke="rgba(255,255,255,0.035)" stroke-width=".5"/>
     <path id="g-track" fill="none" stroke="#0d0f1c" stroke-width="13" stroke-linecap="round"/>
+    <path class="arc-sheen" fill="none" stroke="url(#rim-light)" stroke-width="2.2" stroke-linecap="round" transform="translate(0 -3)"/>
+    <path class="arc-gloss" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" transform="translate(0 -5.3)"/>
     <path id="g-wide" fill="none" stroke-width="26" stroke-linecap="round" opacity=".18" filter="url(#gwide)"/>
     <path id="g-fill" fill="none" stroke-width="13" stroke-linecap="round" filter="url(#gf)"/>
     <g id="ticks-g"></g>
-    <g id="needle" style="transform-box:view-box">
-      <polygon points="224,146 140,143 140,149" fill="rgba(0,0,0,.45)" transform="translate(3,3)"/>
-      <polygon id="needle-body" points="224,146 140,141 140,151"/>
-      <polygon points="224,146 150,144.5 190,145.5" fill="rgba(255,255,255,.22)"/>
-    </g>
-    <circle cx="150" cy="146" r="21" fill="rgba(7,8,15,.95)" stroke="rgba(201,168,76,0.18)" stroke-width="1"/>
-    <circle cx="150" cy="146" r="15" fill="url(#hub-g)"/>
-    <text x="150" y="150" text-anchor="middle" dominant-baseline="middle"
-      fill="rgba(7,8,15,0.85)" font-size="11" font-weight="900" font-family="'Inter',sans-serif" letter-spacing=".5px">SH</text>
-    <circle cx="150" cy="146" r="3.5" fill="rgba(7,8,15,0.5)"/>
-    <text id="speed-val" x="150" y="198" text-anchor="middle" dominant-baseline="middle"
-      fill="white" font-weight="800" font-family="'Inter',sans-serif" style="letter-spacing:-1.5px">—</text>
-    <text x="150" y="220" text-anchor="middle" fill="rgba(255,255,255,.28)" font-size="9.5" font-family="'Inter',sans-serif" letter-spacing="3px" font-weight="600">MBPS</text>
+    <g id="needle" style="transform-box:view-box"><circle id="needle-body" cx="250" cy="146" r="4.3" stroke="white" stroke-width="1.8"/></g>
+    <svg x="132" y="88" width="36" height="27" viewBox="0 0 24 24" fill="none" stroke="#1468ff" stroke-width="2.6" stroke-linecap="round"><use href="#i-wifi"/></svg>
+    <text id="dial-label" x="150" y="131" text-anchor="middle" font-weight="680" font-size="12"></text>
+    <text id="speed-val" x="150" y="170" text-anchor="middle" font-size="47" font-weight="800">—</text>
+    <text class="dial-unit" x="150" y="190" text-anchor="middle" font-size="14" font-weight="650">Mbps</text>
     <circle id="dd" cx="143" cy="238" r="2.8" fill="rgba(255,255,255,.08)" style="transition:fill .4s"/>
     <circle id="du" cx="157" cy="238" r="2.8" fill="rgba(255,255,255,.08)" style="transition:fill .4s"/>
   </svg>
@@ -388,7 +540,7 @@ html.switching *{transition:background-color .5s ease,color .5s ease,border-colo
   <div id="timer-bar"><div id="timer-fill"></div></div>
   <span id="timer-lbl"></span>
 </div>
-<div id="status"></div>
+<div id="status" role="status"></div>
 <div id="time-estimate"></div>
 
 <!-- Warn -->
@@ -411,34 +563,30 @@ html.switching *{transition:background-color .5s ease,color .5s ease,border-colo
   </div>
 </div>
 
-<!-- PRIMARY: DL + UL -->
+</section><!-- PRIMARY: DL + UL -->
 <div id="primary-cards">
   <div class="pcard" id="card-dl">
     <div class="pcard-glow" id="glow-dl"></div>
-    <div class="pcard-icon-wrap" id="icon-dl">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="opacity:.35"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
-    </div>
+    <div class="pcard-icon-wrap" id="icon-dl"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-down"/></svg></div>
     <div class="pcard-label" id="lbl-dl">Descàrrega</div>
     <div class="pcard-value" id="val-dl">—</div>
     <div class="pcard-unit">Mbps</div>
   </div>
   <div class="pcard" id="card-ul">
     <div class="pcard-glow" id="glow-ul"></div>
-    <div class="pcard-icon-wrap" id="icon-ul">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="opacity:.35"><polyline points="16 7 12 3 8 7"/><line x1="12" y1="3" x2="12" y2="15"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
-    </div>
+    <div class="pcard-icon-wrap" id="icon-ul"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-up"/></svg></div>
     <div class="pcard-label" id="lbl-ul">Pujada</div>
     <div class="pcard-value" id="val-ul">—</div>
     <div class="pcard-unit" id="unit-ul">Mbps</div>
   </div>
 </div>
 
-<!-- QUALITY (prominent) -->
+</div><!-- QUALITY (prominent) -->
 <div id="quality">
-  <div id="quality-dot"></div>
+  <svg class="ico quality-award" aria-hidden="true" focusable="false"><use href="#i-award"/></svg><div id="quality-dot"></div>
   <div id="quality-body">
     <span id="quality-sublabel">Qualitat de connexió</span>
-    <span id="quality-text"></span>
+    <span id="quality-text"></span><span id="quality-empty"></span>
   </div>
 </div>
 <div id="disclaimer"></div>
@@ -478,7 +626,7 @@ html.switching *{transition:background-color .5s ease,color .5s ease,border-colo
   </div>
 </div>
 
-<!-- FOOTER SH APPS -->
+</main><!-- FOOTER SH APPS -->
 <div id="footer">
   <div id="footer-apps-label">SH Apps</div>
   <div id="footer-apps">
@@ -506,23 +654,23 @@ html.switching *{transition:background-color .5s ease,color .5s ease,border-colo
   </div>
   <div id="footer-research">Metodologia Ookla · Cloudflare · RFC 6349</div>
 </div>
-</div>
+</div></div>
 
 <script>
 // ══ GAUGE ══
-const CX=150,CY=146,R=100,START=140,SWEEP=260,MAX=500;
+const CX=150,CY=146,R=100,START=150,SWEEP=240,MAX=500;
 const CIRC=2*Math.PI*R,ARC=CIRC*SWEEP/360;
 const rad=d=>d*Math.PI/180;
 const pt=(a,r=R)=>[+(CX+r*Math.cos(rad(a))).toFixed(2),+(CY+r*Math.sin(rad(a))).toFixed(2)];
 const[sx,sy]=pt(START),[ex,ey]=pt(START+SWEEP);
 const D=`M${sx},${sy} A${R},${R} 0 1,1 ${ex},${ey}`;
 const gTrack=document.getElementById('g-track'),gFill=document.getElementById('g-fill'),gWide=document.getElementById('g-wide');
-[gTrack,gFill,gWide].forEach(e=>e.setAttribute('d',D));
+[gTrack,gFill,gWide,...document.querySelectorAll(".arc-sheen,.arc-gloss")].forEach(e=>e.setAttribute('d',D));
 gFill.setAttribute('stroke-dasharray',`${ARC} ${CIRC}`);gFill.setAttribute('stroke-dashoffset',ARC);
 gWide.setAttribute('stroke-dasharray',`${ARC} ${CIRC}`);gWide.setAttribute('stroke-dashoffset',ARC);
 const tG=document.getElementById('ticks-g');
 [0,100,200,300,400,500].forEach(v=>{
-  const a=START+(v/MAX)*SWEEP,[ox,oy]=pt(a,R+5),[ix,iy]=pt(a,R-5),[lx,ly]=pt(a,R+19);
+  const a=START+(v/MAX)*SWEEP,[ox,oy]=pt(a,R+5),[ix,iy]=pt(a,R-5),[lx,ly]=pt(a,R-16);
   tG.innerHTML+=`<line x1="${ox}" y1="${oy}" x2="${ix}" y2="${iy}" stroke="rgba(255,255,255,.14)" stroke-width="${v%200===0?2:1.2}"/>
   <text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" fill="rgba(255,255,255,.22)" font-size="7.5" font-family="Inter,monospace" font-weight="500">${v}</text>`;
 });
@@ -533,8 +681,9 @@ const tG=document.getElementById('ticks-g');
 const needleEl=document.getElementById('needle');
 needleEl.style.transformOrigin=`${CX}px ${CY}px`;
 const speedTxt=document.getElementById('speed-val');
-let _cur=0,_tgt=0,_col='#c9a84c',_raf=null;
-function setTarget(s,c){_tgt=Math.max(0,s);_col=c;if(!_raf)_raf=requestAnimationFrame(_step);}
+let _cur=0,_tgt=0,_col='#c9a84c',_raf=null,_final=false;
+// _final: resultat definitiu mantingut al centre (mostra també valors vàlids < 0,5 Mbps)
+function setTarget(s,c,fin){_final=!!fin;_tgt=Math.max(0,s);_col=c;if(!_raf)_raf=requestAnimationFrame(_step);}
 function _step(){const d=_tgt-_cur;_cur+=d*0.16;if(Math.abs(d)<0.04){_cur=_tgt;_render(_cur,_col);_raf=null;return;}_render(_cur,_col);_raf=requestAnimationFrame(_step);}
 function _render(s,c){
   const f=Math.min(Math.max(s/MAX,0),1),off=ARC*(1-f);
@@ -542,8 +691,8 @@ function _render(s,c){
   gWide.setAttribute('stroke-dashoffset',off);gWide.setAttribute('stroke',c);
   needleEl.style.transform=`rotate(${START+f*SWEEP}deg)`;
   document.getElementById('needle-body').setAttribute('fill',c);
-  speedTxt.textContent=s<0.5?'—':s<10?s.toFixed(1):Math.round(s).toString();
-  speedTxt.setAttribute('font-size',s>99?'38':'42');
+  speedTxt.textContent=(s<0.5&&!(_final&&s>0))?'—':s<10?s.toFixed(1):Math.round(s).toString();
+  speedTxt.setAttribute('font-size',s>999?'36':'47');
 }
 _render(0,'#c9a84c');
 
@@ -556,20 +705,36 @@ function stopTimer(){clearInterval(timerIv);timerFill.style.transition='width .4
 // ══ LANGUAGES ══
 const LANGS={ca:"Català",es:"Español",en:"English",fr:"Français",de:"Deutsch",it:"Italiano",pt:"Português",nl:"Nederlands",pl:"Polski",sv:"Svenska",ro:"Română",el:"Ελληνικά"};
 const T={
-  ca:{dl:"Descàrrega",ul:"Pujada",start:"Iniciar diagnòstic",again:"Repetir diagnòstic",prep:"Preparant diagnòstic...",pd:"Mesurant baixada...",pu:"Mesurant pujada...",analyze:"Analitzant rendiment...",done:"Diagnòstic completat",idle:"Prem per iniciar el diagnòstic",ulwarn:"No s'ha pogut mesurar la pujada",ulwarnmsg:"Comprova la connexió i torna-ho a provar.",hi:"Connexió excel·lent",ok:"Connexió bona",fair:"Connexió correcta",lo:"Connexió millorable",history:"Historial de proves",current:"Diagnòstic actual",clear:"Esborrar",empty:"Cap diagnòstic realitzat",today:"Avui",yesterday:"Ahir",dawn:"Matí",day:"Dia",golden:"Tarda",dusk:"Capvespre",night:"Nit",quality:"Qualitat de connexió",qm_hi:"Connexió excel·lent per streaming, videotrucades i feina intensiva",qm_ok:"Connexió bona per a ús habitual",qm_fair:"Connexió correcta",qm_lo:"Connexió millorable",connTitle:"Connexió detectada",connDetected:"Detectat",connUnavailable:"No disponible",connDetecting:"Detectant...",connAuto:"automàtica",advisory:"Resultat estimat segons servidor de prova (Cloudflare). Pot variar respecte a Speedtest i altres serveis segons servidor, xarxa i dispositiu.",estTime:"Temps estimat: ~{s} s"},
-  es:{dl:"Descarga",ul:"Subida",start:"Iniciar diagnóstico",again:"Repetir",prep:"Preparando diagnóstico...",pd:"Midiendo bajada...",pu:"Midiendo subida...",analyze:"Analizando rendimiento...",done:"Diagnóstico completado",idle:"Pulsa para iniciar",ulwarn:"No se pudo medir la subida",ulwarnmsg:"Comprueba la conexión e inténtalo de nuevo.",hi:"Conexión excelente",ok:"Conexión buena",fair:"Conexión correcta",lo:"Conexión mejorable",history:"Historial de pruebas",current:"Diagnóstico actual",clear:"Borrar",empty:"Sin diagnósticos",today:"Hoy",yesterday:"Ayer",dawn:"Mañana",day:"Día",golden:"Tarde",dusk:"Atardecer",night:"Noche",quality:"Calidad de conexión",qm_hi:"Conexión excelente para streaming, videollamadas y trabajo intensivo",qm_ok:"Conexión buena para uso habitual",qm_fair:"Conexión correcta",qm_lo:"Conexión mejorable",connTitle:"Conexión detectada",connDetected:"Detectado",connUnavailable:"No disponible",connDetecting:"Detectando...",connAuto:"automática",advisory:"Resultado estimado según servidor de prueba (Cloudflare). Puede variar respecto a Speedtest y otros servicios según servidor, red y dispositivo.",estTime:"Tiempo estimado: ~{s} s"},
-  en:{dl:"Download",ul:"Upload",start:"Start diagnostic",again:"Run again",prep:"Preparing diagnostic...",pd:"Measuring download...",pu:"Measuring upload...",analyze:"Analyzing performance...",done:"Diagnostic complete",idle:"Press to start diagnostic",ulwarn:"Upload measurement failed",ulwarnmsg:"Check your connection and try again.",hi:"Excellent connection",ok:"Good connection",fair:"Fair connection",lo:"Poor connection",history:"Test history",current:"Current diagnostic",clear:"Clear",empty:"No diagnostics yet",today:"Today",yesterday:"Yesterday",dawn:"Dawn",day:"Day",golden:"Afternoon",dusk:"Dusk",night:"Night",quality:"Connection quality",qm_hi:"Excellent connection for streaming, video calls and heavy workloads",qm_ok:"Good connection for everyday use",qm_fair:"Fair connection",qm_lo:"Connection could be improved",connTitle:"Connection detected",connDetected:"Detected",connUnavailable:"Not available",connDetecting:"Detecting...",connAuto:"automatic",advisory:"Estimated result based on test server (Cloudflare). May vary from Speedtest and other services depending on server, network and device.",estTime:"Estimated time: ~{s}s"},
-  fr:{dl:"Téléchargement",ul:"Upload",start:"Démarrer diagnostic",again:"Relancer",prep:"Préparation du diagnostic...",pd:"Mesure du téléchargement...",pu:"Mesure upload...",analyze:"Analyse des performances...",done:"Diagnostic terminé",idle:"Appuyez pour démarrer",ulwarn:"Échec de la mesure upload",ulwarnmsg:"Vérifiez votre connexion et réessayez.",hi:"Connexion excellente",ok:"Bonne connexion",fair:"Connexion correcte",lo:"Connexion faible",history:"Historique des tests",current:"Diagnostic actuel",clear:"Effacer",empty:"Aucun diagnostic",today:"Aujourd'hui",yesterday:"Hier",dawn:"Matin",day:"Jour",golden:"Après-midi",dusk:"Crépuscule",night:"Nuit",quality:"Qualité de connexion",qm_hi:"Connexion excellente pour le streaming, les appels vidéo et le travail intensif",qm_ok:"Bonne connexion pour un usage courant",qm_fair:"Connexion correcte",qm_lo:"Connexion à améliorer",connTitle:"Connexion détectée",connDetected:"Détecté",connUnavailable:"Non disponible",connDetecting:"Détection...",connAuto:"automatique",advisory:"Résultat estimé selon le serveur de test (Cloudflare). Peut varier par rapport à Speedtest et à d'autres services selon le serveur, le réseau et l'appareil.",estTime:"Temps estimé : ~{s} s"},
-  de:{dl:"Download",ul:"Upload",start:"Diagnose starten",again:"Wiederholen",prep:"Diagnose wird vorbereitet...",pd:"Download wird gemessen...",pu:"Upload wird gemessen...",analyze:"Leistung wird analysiert...",done:"Diagnose abgeschlossen",idle:"Zum Starten drücken",ulwarn:"Upload-Messung fehlgeschlagen",ulwarnmsg:"Verbindung prüfen und erneut versuchen.",hi:"Ausgezeichnete Verbindung",ok:"Gute Verbindung",fair:"Ausreichende Verbindung",lo:"Schwache Verbindung",history:"Testverlauf",current:"Aktuelle Diagnose",clear:"Löschen",empty:"Keine Diagnosen",today:"Heute",yesterday:"Gestern",dawn:"Morgen",day:"Tag",golden:"Nachmittag",dusk:"Dämmerung",night:"Nacht",quality:"Verbindungsqualität",qm_hi:"Ausgezeichnete Verbindung für Streaming, Videoanrufe und intensives Arbeiten",qm_ok:"Gute Verbindung für den Alltag",qm_fair:"Ausreichende Verbindung",qm_lo:"Verbindung ausbaufähig",connTitle:"Verbindung erkannt",connDetected:"Erkannt",connUnavailable:"Nicht verfügbar",connDetecting:"Wird erkannt...",connAuto:"automatisch",advisory:"Geschätztes Ergebnis basierend auf dem Testserver (Cloudflare). Kann von Speedtest und anderen Diensten abweichen, je nach Server, Netzwerk und Gerät.",estTime:"Geschätzte Zeit: ~{s} s"},
-  it:{dl:"Download",ul:"Upload",start:"Avvia diagnosi",again:"Ripeti",prep:"Preparazione diagnosi...",pd:"Misurazione download...",pu:"Misurazione upload...",analyze:"Analisi delle prestazioni...",done:"Diagnosi completata",idle:"Premi per iniziare",ulwarn:"Misurazione upload fallita",ulwarnmsg:"Controlla la connessione e riprova.",hi:"Connessione eccellente",ok:"Buona connessione",fair:"Connessione corretta",lo:"Connessione debole",history:"Storico test",current:"Diagnosi attuale",clear:"Cancella",empty:"Nessuna diagnosi",today:"Oggi",yesterday:"Ieri",dawn:"Mattina",day:"Giorno",golden:"Pomeriggio",dusk:"Tramonto",night:"Notte",quality:"Qualità della connessione",qm_hi:"Connessione eccellente per streaming, videochiamate e lavoro intensivo",qm_ok:"Buona connessione per un uso quotidiano",qm_fair:"Connessione corretta",qm_lo:"Connessione migliorabile",connTitle:"Connessione rilevata",connDetected:"Rilevato",connUnavailable:"Non disponibile",connDetecting:"Rilevamento...",connAuto:"automatica",advisory:"Risultato stimato in base al server di test (Cloudflare). Può variare rispetto a Speedtest e ad altri servizi in base a server, rete e dispositivo.",estTime:"Tempo stimato: ~{s} s"},
-  pt:{dl:"Download",ul:"Upload",start:"Iniciar diagnóstico",again:"Repetir",prep:"Preparando diagnóstico...",pd:"Medindo download...",pu:"Medindo upload...",analyze:"Analisando desempenho...",done:"Diagnóstico concluído",idle:"Prima para iniciar",ulwarn:"Falha na medição do upload",ulwarnmsg:"Verifique a conexão e tente novamente.",hi:"Conexão excelente",ok:"Boa conexão",fair:"Conexão correta",lo:"Conexão fraca",history:"Histórico de testes",current:"Diagnóstico atual",clear:"Limpar",empty:"Sem diagnósticos",today:"Hoje",yesterday:"Ontem",dawn:"Manhã",day:"Dia",golden:"Tarde",dusk:"Entardecer",night:"Noite",quality:"Qualidade da conexão",qm_hi:"Conexão excelente para streaming, videochamadas e trabalho intensivo",qm_ok:"Boa conexão para uso diário",qm_fair:"Conexão correta",qm_lo:"Conexão a melhorar",connTitle:"Conexão detectada",connDetected:"Detetado",connUnavailable:"Não disponível",connDetecting:"A detetar...",connAuto:"automática",advisory:"Resultado estimado com base no servidor de teste (Cloudflare). Pode variar em relação ao Speedtest e a outros serviços consoante o servidor, a rede e o dispositivo.",estTime:"Tempo estimado: ~{s} s"},
-  nl:{dl:"Download",ul:"Upload",start:"Diagnose starten",again:"Opnieuw",prep:"Diagnose voorbereiden...",pd:"Download meten...",pu:"Upload meten...",analyze:"Prestaties analyseren...",done:"Diagnose voltooid",idle:"Druk om te starten",ulwarn:"Uploadmeting mislukt",ulwarnmsg:"Controleer uw verbinding en probeer opnieuw.",hi:"Uitstekende verbinding",ok:"Goede verbinding",fair:"Correcte verbinding",lo:"Slechte verbinding",history:"Testgeschiedenis",current:"Huidige diagnose",clear:"Wissen",empty:"Geen diagnoses",today:"Vandaag",yesterday:"Gisteren",dawn:"Ochtend",day:"Dag",golden:"Middag",dusk:"Schemering",night:"Nacht",quality:"Verbindingskwaliteit",qm_hi:"Uitstekende verbinding voor streaming, videobellen en intensief werk",qm_ok:"Goede verbinding voor dagelijks gebruik",qm_fair:"Correcte verbinding",qm_lo:"Verbinding kan beter",connTitle:"Verbinding gedetecteerd",connDetected:"Gedetecteerd",connUnavailable:"Niet beschikbaar",connDetecting:"Detecteren...",connAuto:"automatisch",advisory:"Geschat resultaat op basis van de testserver (Cloudflare). Kan afwijken van Speedtest en andere diensten, afhankelijk van server, netwerk en apparaat.",estTime:"Geschatte tijd: ~{s} s"},
-  pl:{dl:"Pobieranie",ul:"Wysyłanie",start:"Rozpocznij diagnozę",again:"Powtórz",prep:"Przygotowywanie diagnozy...",pd:"Pomiar pobierania...",pu:"Pomiar wysyłania...",analyze:"Analiza wydajności...",done:"Diagnoza zakończona",idle:"Naciśnij, aby rozpocząć",ulwarn:"Pomiar wysyłania nie powiódł się",ulwarnmsg:"Sprawdź połączenie i spróbuj ponownie.",hi:"Doskonałe połączenie",ok:"Dobre połączenie",fair:"Poprawne połączenie",lo:"Słabe połączenie",history:"Historia testów",current:"Bieżąca diagnoza",clear:"Wyczyść",empty:"Brak diagnoz",today:"Dziś",yesterday:"Wczoraj",dawn:"Ranek",day:"Dzień",golden:"Popołudnie",dusk:"Zmierzch",night:"Noc",quality:"Jakość połączenia",qm_hi:"Doskonałe połączenie do streamingu, wideorozmów i intensywnej pracy",qm_ok:"Dobre połączenie do codziennego użytku",qm_fair:"Poprawne połączenie",qm_lo:"Połączenie do poprawy",connTitle:"Wykryto połączenie",connDetected:"Wykryto",connUnavailable:"Niedostępne",connDetecting:"Wykrywanie...",connAuto:"automatyczny",advisory:"Wynik szacunkowy na podstawie serwera testowego (Cloudflare). Może różnić się od Speedtest i innych usług w zależności od serwera, sieci i urządzenia.",estTime:"Szacowany czas: ~{s} s"},
-  sv:{dl:"Nedladdning",ul:"Uppladdning",start:"Starta diagnos",again:"Kör igen",prep:"Förbereder diagnos...",pd:"Mäter nedladdning...",pu:"Mäter uppladdning...",analyze:"Analyserar prestanda...",done:"Diagnos slutförd",idle:"Tryck för att starta",ulwarn:"Uppladdningsmätning misslyckades",ulwarnmsg:"Kontrollera anslutningen och försök igen.",hi:"Utmärkt anslutning",ok:"Bra anslutning",fair:"Korrekt anslutning",lo:"Dålig anslutning",history:"Testhistorik",current:"Aktuell diagnos",clear:"Rensa",empty:"Inga diagnoser",today:"Idag",yesterday:"Igår",dawn:"Morgon",day:"Dag",golden:"Eftermiddag",dusk:"Skymning",night:"Natt",quality:"Anslutningskvalitet",qm_hi:"Utmärkt anslutning för streaming, videosamtal och intensivt arbete",qm_ok:"Bra anslutning för vardagsbruk",qm_fair:"Korrekt anslutning",qm_lo:"Anslutningen kan förbättras",connTitle:"Anslutning upptäckt",connDetected:"Upptäckt",connUnavailable:"Ej tillgänglig",connDetecting:"Upptäcker...",connAuto:"automatisk",advisory:"Uppskattat resultat baserat på testservern (Cloudflare). Kan variera jämfört med Speedtest och andra tjänster beroende på server, nätverk och enhet.",estTime:"Uppskattad tid: ~{s} s"},
-  ro:{dl:"Descărcare",ul:"Încărcare",start:"Pornește diagnosticul",again:"Repetă",prep:"Se pregătește diagnosticul...",pd:"Măsurare descărcare...",pu:"Măsurare încărcare...",analyze:"Se analizează performanța...",done:"Diagnostic finalizat",idle:"Apasă pentru a începe",ulwarn:"Măsurarea încărcării a eșuat",ulwarnmsg:"Verificați conexiunea și încercați din nou.",hi:"Conexiune excelentă",ok:"Conexiune bună",fair:"Conexiune corectă",lo:"Conexiune slabă",history:"Istoric teste",current:"Diagnostic curent",clear:"Șterge",empty:"Niciun diagnostic",today:"Azi",yesterday:"Ieri",dawn:"Dimineață",day:"Zi",golden:"După-amiază",dusk:"Amurg",night:"Noapte",quality:"Calitatea conexiunii",qm_hi:"Conexiune excelentă pentru streaming, apeluri video și lucru intensiv",qm_ok:"Conexiune bună pentru uz zilnic",qm_fair:"Conexiune corectă",qm_lo:"Conexiune de îmbunătățit",connTitle:"Conexiune detectată",connDetected:"Detectat",connUnavailable:"Indisponibil",connDetecting:"Se detectează...",connAuto:"automată",advisory:"Rezultat estimat pe baza serverului de test (Cloudflare). Poate varia față de Speedtest și alte servicii în funcție de server, rețea și dispozitiv.",estTime:"Timp estimat: ~{s} s"},
-  el:{dl:"Λήψη",ul:"Αποστολή",start:"Έναρξη διαγνωστικού",again:"Επανάληψη",prep:"Προετοιμασία διαγνωστικού...",pd:"Μέτρηση λήψης...",pu:"Μέτρηση αποστολής...",analyze:"Ανάλυση απόδοσης...",done:"Διαγνωστικό ολοκληρώθηκε",idle:"Πατήστε για έναρξη",ulwarn:"Αποτυχία μέτρησης αποστολής",ulwarnmsg:"Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.",hi:"Εξαιρετική σύνδεση",ok:"Καλή σύνδεση",fair:"Σωστή σύνδεση",lo:"Κακή σύνδεση",history:"Ιστορικό δοκιμών",current:"Τρέχον διαγνωστικό",clear:"Εκκαθάριση",empty:"Δεν έχουν γίνει διαγνωστικά",today:"Σήμερα",yesterday:"Χθες",dawn:"Πρωί",day:"Ημέρα",golden:"Απόγευμα",dusk:"Δειλινό",night:"Νύχτα",quality:"Ποιότητα σύνδεσης",qm_hi:"Εξαιρετική σύνδεση για streaming, βιντεοκλήσεις και εντατική εργασία",qm_ok:"Καλή σύνδεση για καθημερινή χρήση",qm_fair:"Σωστή σύνδεση",qm_lo:"Η σύνδεση χρειάζεται βελτίωση",connTitle:"Εντοπίστηκε σύνδεση",connDetected:"Εντοπίστηκε",connUnavailable:"Μη διαθέσιμο",connDetecting:"Εντοπισμός...",connAuto:"αυτόματη",advisory:"Εκτιμώμενο αποτέλεσμα βάσει του διακομιστή δοκιμής (Cloudflare). Μπορεί να διαφέρει από το Speedtest και άλλες υπηρεσίες ανάλογα με τον διακομιστή, το δίκτυο και τη συσκευή.",estTime:"Εκτιμώμενος χρόνος: ~{s} δευτ."},
+  ca:{heading:"Diagnòstic de la teva connexió",dl:"Descàrrega",ul:"Pujada",start:"Iniciar diagnòstic",again:"Repetir diagnòstic",prep:"Preparant diagnòstic...",pd:"Mesurant baixada...",pu:"Mesurant pujada...",analyze:"Analitzant rendiment...",done:"Diagnòstic completat",idle:"Prem per iniciar el diagnòstic",ulwarn:"No s'ha pogut mesurar la pujada",ulwarnmsg:"Comprova la connexió i torna-ho a provar.",hi:"Connexió excel·lent",ok:"Connexió bona",fair:"Connexió correcta",lo:"Connexió millorable",history:"Historial de proves",current:"Diagnòstic actual",clear:"Esborrar",empty:"Cap diagnòstic realitzat",today:"Avui",yesterday:"Ahir",dawn:"Matí",day:"Dia",golden:"Tarda",dusk:"Capvespre",night:"Nit",quality:"Qualitat de connexió",qm_hi:"Connexió excel·lent per streaming, videotrucades i feina intensiva",qm_ok:"Connexió bona per a ús habitual",qm_fair:"Connexió correcta",qm_lo:"Connexió millorable",connTitle:"Connexió detectada",connDetected:"Detectat",connUnavailable:"No disponible",connDetecting:"Detectant...",connAuto:"automàtica",advisory:"Resultat estimat segons servidor de prova (Cloudflare). Pot variar respecte a Speedtest i altres serveis segons servidor, xarxa i dispositiu.",estTime:"Temps estimat: ~{s} s"},
+  es:{heading:"Diagnóstico de tu conexión",dl:"Descarga",ul:"Subida",start:"Iniciar diagnóstico",again:"Repetir",prep:"Preparando diagnóstico...",pd:"Midiendo bajada...",pu:"Midiendo subida...",analyze:"Analizando rendimiento...",done:"Diagnóstico completado",idle:"Pulsa para iniciar",ulwarn:"No se pudo medir la subida",ulwarnmsg:"Comprueba la conexión e inténtalo de nuevo.",hi:"Conexión excelente",ok:"Conexión buena",fair:"Conexión correcta",lo:"Conexión mejorable",history:"Historial de pruebas",current:"Diagnóstico actual",clear:"Borrar",empty:"Sin diagnósticos",today:"Hoy",yesterday:"Ayer",dawn:"Mañana",day:"Día",golden:"Tarde",dusk:"Atardecer",night:"Noche",quality:"Calidad de conexión",qm_hi:"Conexión excelente para streaming, videollamadas y trabajo intensivo",qm_ok:"Conexión buena para uso habitual",qm_fair:"Conexión correcta",qm_lo:"Conexión mejorable",connTitle:"Conexión detectada",connDetected:"Detectado",connUnavailable:"No disponible",connDetecting:"Detectando...",connAuto:"automática",advisory:"Resultado estimado según servidor de prueba (Cloudflare). Puede variar respecto a Speedtest y otros servicios según servidor, red y dispositivo.",estTime:"Tiempo estimado: ~{s} s"},
+  en:{heading:"Connection diagnostics",dl:"Download",ul:"Upload",start:"Start diagnostic",again:"Run again",prep:"Preparing diagnostic...",pd:"Measuring download...",pu:"Measuring upload...",analyze:"Analyzing performance...",done:"Diagnostic complete",idle:"Press to start diagnostic",ulwarn:"Upload measurement failed",ulwarnmsg:"Check your connection and try again.",hi:"Excellent connection",ok:"Good connection",fair:"Fair connection",lo:"Poor connection",history:"Test history",current:"Current diagnostic",clear:"Clear",empty:"No diagnostics yet",today:"Today",yesterday:"Yesterday",dawn:"Dawn",day:"Day",golden:"Afternoon",dusk:"Dusk",night:"Night",quality:"Connection quality",qm_hi:"Excellent connection for streaming, video calls and heavy workloads",qm_ok:"Good connection for everyday use",qm_fair:"Fair connection",qm_lo:"Connection could be improved",connTitle:"Connection detected",connDetected:"Detected",connUnavailable:"Not available",connDetecting:"Detecting...",connAuto:"automatic",advisory:"Estimated result based on test server (Cloudflare). May vary from Speedtest and other services depending on server, network and device.",estTime:"Estimated time: ~{s}s"},
+  fr:{heading:"Diagnostic de votre connexion",dl:"Téléchargement",ul:"Upload",start:"Démarrer diagnostic",again:"Relancer",prep:"Préparation du diagnostic...",pd:"Mesure du téléchargement...",pu:"Mesure upload...",analyze:"Analyse des performances...",done:"Diagnostic terminé",idle:"Appuyez pour démarrer",ulwarn:"Échec de la mesure upload",ulwarnmsg:"Vérifiez votre connexion et réessayez.",hi:"Connexion excellente",ok:"Bonne connexion",fair:"Connexion correcte",lo:"Connexion faible",history:"Historique des tests",current:"Diagnostic actuel",clear:"Effacer",empty:"Aucun diagnostic",today:"Aujourd'hui",yesterday:"Hier",dawn:"Matin",day:"Jour",golden:"Après-midi",dusk:"Crépuscule",night:"Nuit",quality:"Qualité de connexion",qm_hi:"Connexion excellente pour le streaming, les appels vidéo et le travail intensif",qm_ok:"Bonne connexion pour un usage courant",qm_fair:"Connexion correcte",qm_lo:"Connexion à améliorer",connTitle:"Connexion détectée",connDetected:"Détecté",connUnavailable:"Non disponible",connDetecting:"Détection...",connAuto:"automatique",advisory:"Résultat estimé selon le serveur de test (Cloudflare). Peut varier par rapport à Speedtest et à d'autres services selon le serveur, le réseau et l'appareil.",estTime:"Temps estimé : ~{s} s"},
+  de:{heading:"Verbindungsdiagnose",dl:"Download",ul:"Upload",start:"Diagnose starten",again:"Wiederholen",prep:"Diagnose wird vorbereitet...",pd:"Download wird gemessen...",pu:"Upload wird gemessen...",analyze:"Leistung wird analysiert...",done:"Diagnose abgeschlossen",idle:"Zum Starten drücken",ulwarn:"Upload-Messung fehlgeschlagen",ulwarnmsg:"Verbindung prüfen und erneut versuchen.",hi:"Ausgezeichnete Verbindung",ok:"Gute Verbindung",fair:"Ausreichende Verbindung",lo:"Schwache Verbindung",history:"Testverlauf",current:"Aktuelle Diagnose",clear:"Löschen",empty:"Keine Diagnosen",today:"Heute",yesterday:"Gestern",dawn:"Morgen",day:"Tag",golden:"Nachmittag",dusk:"Dämmerung",night:"Nacht",quality:"Verbindungsqualität",qm_hi:"Ausgezeichnete Verbindung für Streaming, Videoanrufe und intensives Arbeiten",qm_ok:"Gute Verbindung für den Alltag",qm_fair:"Ausreichende Verbindung",qm_lo:"Verbindung ausbaufähig",connTitle:"Verbindung erkannt",connDetected:"Erkannt",connUnavailable:"Nicht verfügbar",connDetecting:"Wird erkannt...",connAuto:"automatisch",advisory:"Geschätztes Ergebnis basierend auf dem Testserver (Cloudflare). Kann von Speedtest und anderen Diensten abweichen, je nach Server, Netzwerk und Gerät.",estTime:"Geschätzte Zeit: ~{s} s"},
+  it:{heading:"Diagnostica della connessione",dl:"Download",ul:"Upload",start:"Avvia diagnosi",again:"Ripeti",prep:"Preparazione diagnosi...",pd:"Misurazione download...",pu:"Misurazione upload...",analyze:"Analisi delle prestazioni...",done:"Diagnosi completata",idle:"Premi per iniziare",ulwarn:"Misurazione upload fallita",ulwarnmsg:"Controlla la connessione e riprova.",hi:"Connessione eccellente",ok:"Buona connessione",fair:"Connessione corretta",lo:"Connessione debole",history:"Storico test",current:"Diagnosi attuale",clear:"Cancella",empty:"Nessuna diagnosi",today:"Oggi",yesterday:"Ieri",dawn:"Mattina",day:"Giorno",golden:"Pomeriggio",dusk:"Tramonto",night:"Notte",quality:"Qualità della connessione",qm_hi:"Connessione eccellente per streaming, videochiamate e lavoro intensivo",qm_ok:"Buona connessione per un uso quotidiano",qm_fair:"Connessione corretta",qm_lo:"Connessione migliorabile",connTitle:"Connessione rilevata",connDetected:"Rilevato",connUnavailable:"Non disponibile",connDetecting:"Rilevamento...",connAuto:"automatica",advisory:"Risultato stimato in base al server di test (Cloudflare). Può variare rispetto a Speedtest e ad altri servizi in base a server, rete e dispositivo.",estTime:"Tempo stimato: ~{s} s"},
+  pt:{heading:"Diagnóstico da ligação",dl:"Download",ul:"Upload",start:"Iniciar diagnóstico",again:"Repetir",prep:"Preparando diagnóstico...",pd:"Medindo download...",pu:"Medindo upload...",analyze:"Analisando desempenho...",done:"Diagnóstico concluído",idle:"Prima para iniciar",ulwarn:"Falha na medição do upload",ulwarnmsg:"Verifique a conexão e tente novamente.",hi:"Conexão excelente",ok:"Boa conexão",fair:"Conexão correta",lo:"Conexão fraca",history:"Histórico de testes",current:"Diagnóstico atual",clear:"Limpar",empty:"Sem diagnósticos",today:"Hoje",yesterday:"Ontem",dawn:"Manhã",day:"Dia",golden:"Tarde",dusk:"Entardecer",night:"Noite",quality:"Qualidade da conexão",qm_hi:"Conexão excelente para streaming, videochamadas e trabalho intensivo",qm_ok:"Boa conexão para uso diário",qm_fair:"Conexão correta",qm_lo:"Conexão a melhorar",connTitle:"Conexão detectada",connDetected:"Detetado",connUnavailable:"Não disponível",connDetecting:"A detetar...",connAuto:"automática",advisory:"Resultado estimado com base no servidor de teste (Cloudflare). Pode variar em relação ao Speedtest e a outros serviços consoante o servidor, a rede e o dispositivo.",estTime:"Tempo estimado: ~{s} s"},
+  nl:{heading:"Verbindingsdiagnose",dl:"Download",ul:"Upload",start:"Diagnose starten",again:"Opnieuw",prep:"Diagnose voorbereiden...",pd:"Download meten...",pu:"Upload meten...",analyze:"Prestaties analyseren...",done:"Diagnose voltooid",idle:"Druk om te starten",ulwarn:"Uploadmeting mislukt",ulwarnmsg:"Controleer uw verbinding en probeer opnieuw.",hi:"Uitstekende verbinding",ok:"Goede verbinding",fair:"Correcte verbinding",lo:"Slechte verbinding",history:"Testgeschiedenis",current:"Huidige diagnose",clear:"Wissen",empty:"Geen diagnoses",today:"Vandaag",yesterday:"Gisteren",dawn:"Ochtend",day:"Dag",golden:"Middag",dusk:"Schemering",night:"Nacht",quality:"Verbindingskwaliteit",qm_hi:"Uitstekende verbinding voor streaming, videobellen en intensief werk",qm_ok:"Goede verbinding voor dagelijks gebruik",qm_fair:"Correcte verbinding",qm_lo:"Verbinding kan beter",connTitle:"Verbinding gedetecteerd",connDetected:"Gedetecteerd",connUnavailable:"Niet beschikbaar",connDetecting:"Detecteren...",connAuto:"automatisch",advisory:"Geschat resultaat op basis van de testserver (Cloudflare). Kan afwijken van Speedtest en andere diensten, afhankelijk van server, netwerk en apparaat.",estTime:"Geschatte tijd: ~{s} s"},
+  pl:{heading:"Diagnostyka połączenia",dl:"Pobieranie",ul:"Wysyłanie",start:"Rozpocznij diagnozę",again:"Powtórz",prep:"Przygotowywanie diagnozy...",pd:"Pomiar pobierania...",pu:"Pomiar wysyłania...",analyze:"Analiza wydajności...",done:"Diagnoza zakończona",idle:"Naciśnij, aby rozpocząć",ulwarn:"Pomiar wysyłania nie powiódł się",ulwarnmsg:"Sprawdź połączenie i spróbuj ponownie.",hi:"Doskonałe połączenie",ok:"Dobre połączenie",fair:"Poprawne połączenie",lo:"Słabe połączenie",history:"Historia testów",current:"Bieżąca diagnoza",clear:"Wyczyść",empty:"Brak diagnoz",today:"Dziś",yesterday:"Wczoraj",dawn:"Ranek",day:"Dzień",golden:"Popołudnie",dusk:"Zmierzch",night:"Noc",quality:"Jakość połączenia",qm_hi:"Doskonałe połączenie do streamingu, wideorozmów i intensywnej pracy",qm_ok:"Dobre połączenie do codziennego użytku",qm_fair:"Poprawne połączenie",qm_lo:"Połączenie do poprawy",connTitle:"Wykryto połączenie",connDetected:"Wykryto",connUnavailable:"Niedostępne",connDetecting:"Wykrywanie...",connAuto:"automatyczny",advisory:"Wynik szacunkowy na podstawie serwera testowego (Cloudflare). Może różnić się od Speedtest i innych usług w zależności od serwera, sieci i urządzenia.",estTime:"Szacowany czas: ~{s} s"},
+  sv:{heading:"Anslutningsdiagnostik",dl:"Nedladdning",ul:"Uppladdning",start:"Starta diagnos",again:"Kör igen",prep:"Förbereder diagnos...",pd:"Mäter nedladdning...",pu:"Mäter uppladdning...",analyze:"Analyserar prestanda...",done:"Diagnos slutförd",idle:"Tryck för att starta",ulwarn:"Uppladdningsmätning misslyckades",ulwarnmsg:"Kontrollera anslutningen och försök igen.",hi:"Utmärkt anslutning",ok:"Bra anslutning",fair:"Korrekt anslutning",lo:"Dålig anslutning",history:"Testhistorik",current:"Aktuell diagnos",clear:"Rensa",empty:"Inga diagnoser",today:"Idag",yesterday:"Igår",dawn:"Morgon",day:"Dag",golden:"Eftermiddag",dusk:"Skymning",night:"Natt",quality:"Anslutningskvalitet",qm_hi:"Utmärkt anslutning för streaming, videosamtal och intensivt arbete",qm_ok:"Bra anslutning för vardagsbruk",qm_fair:"Korrekt anslutning",qm_lo:"Anslutningen kan förbättras",connTitle:"Anslutning upptäckt",connDetected:"Upptäckt",connUnavailable:"Ej tillgänglig",connDetecting:"Upptäcker...",connAuto:"automatisk",advisory:"Uppskattat resultat baserat på testservern (Cloudflare). Kan variera jämfört med Speedtest och andra tjänster beroende på server, nätverk och enhet.",estTime:"Uppskattad tid: ~{s} s"},
+  ro:{heading:"Diagnosticarea conexiunii",dl:"Descărcare",ul:"Încărcare",start:"Pornește diagnosticul",again:"Repetă",prep:"Se pregătește diagnosticul...",pd:"Măsurare descărcare...",pu:"Măsurare încărcare...",analyze:"Se analizează performanța...",done:"Diagnostic finalizat",idle:"Apasă pentru a începe",ulwarn:"Măsurarea încărcării a eșuat",ulwarnmsg:"Verificați conexiunea și încercați din nou.",hi:"Conexiune excelentă",ok:"Conexiune bună",fair:"Conexiune corectă",lo:"Conexiune slabă",history:"Istoric teste",current:"Diagnostic curent",clear:"Șterge",empty:"Niciun diagnostic",today:"Azi",yesterday:"Ieri",dawn:"Dimineață",day:"Zi",golden:"După-amiază",dusk:"Amurg",night:"Noapte",quality:"Calitatea conexiunii",qm_hi:"Conexiune excelentă pentru streaming, apeluri video și lucru intensiv",qm_ok:"Conexiune bună pentru uz zilnic",qm_fair:"Conexiune corectă",qm_lo:"Conexiune de îmbunătățit",connTitle:"Conexiune detectată",connDetected:"Detectat",connUnavailable:"Indisponibil",connDetecting:"Se detectează...",connAuto:"automată",advisory:"Rezultat estimat pe baza serverului de test (Cloudflare). Poate varia față de Speedtest și alte servicii în funcție de server, rețea și dispozitiv.",estTime:"Timp estimat: ~{s} s"},
+  el:{heading:"Διαγνωστικός έλεγχος σύνδεσης",dl:"Λήψη",ul:"Αποστολή",start:"Έναρξη διαγνωστικού",again:"Επανάληψη",prep:"Προετοιμασία διαγνωστικού...",pd:"Μέτρηση λήψης...",pu:"Μέτρηση αποστολής...",analyze:"Ανάλυση απόδοσης...",done:"Διαγνωστικό ολοκληρώθηκε",idle:"Πατήστε για έναρξη",ulwarn:"Αποτυχία μέτρησης αποστολής",ulwarnmsg:"Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.",hi:"Εξαιρετική σύνδεση",ok:"Καλή σύνδεση",fair:"Σωστή σύνδεση",lo:"Κακή σύνδεση",history:"Ιστορικό δοκιμών",current:"Τρέχον διαγνωστικό",clear:"Εκκαθάριση",empty:"Δεν έχουν γίνει διαγνωστικά",today:"Σήμερα",yesterday:"Χθες",dawn:"Πρωί",day:"Ημέρα",golden:"Απόγευμα",dusk:"Δειλινό",night:"Νύχτα",quality:"Ποιότητα σύνδεσης",qm_hi:"Εξαιρετική σύνδεση για streaming, βιντεοκλήσεις και εντατική εργασία",qm_ok:"Καλή σύνδεση για καθημερινή χρήση",qm_fair:"Σωστή σύνδεση",qm_lo:"Η σύνδεση χρειάζεται βελτίωση",connTitle:"Εντοπίστηκε σύνδεση",connDetected:"Εντοπίστηκε",connUnavailable:"Μη διαθέσιμο",connDetecting:"Εντοπισμός...",connAuto:"αυτόματη",advisory:"Εκτιμώμενο αποτέλεσμα βάσει του διακομιστή δοκιμής (Cloudflare). Μπορεί να διαφέρει από το Speedtest και άλλες υπηρεσίες ανάλογα με τον διακομιστή, το δίκτυο και τη συσκευή.",estTime:"Εκτιμώμενος χρόνος: ~{s} δευτ."},
 };
-const PC={idle:'#c9a84c',download:'#00d4ff',upload:'#a855f7',done:'#10b981'};
+// Estats i errors del motor v4 (diagnòstic incomplet). {c} = codi HTTP.
+const TX={
+  ca:{incomplete:"Diagnòstic incomplet",incShort:"Incomplet",incMsg:"Es conserven els resultats vàlids. Sense baixada i pujada no es calcula la qualitat global.",err_http:"error del servidor ({c})",err_network:"error de xarxa o accés bloquejat",err_timeout:"temps d'espera esgotat",err_cancel:"prova cancel·lada",err_invalid:"dades no verificables",err_insufficient:"dades insuficients per a una mesura fiable"},
+  es:{incomplete:"Diagnóstico incompleto",incShort:"Incompleto",incMsg:"Se conservan los resultados válidos. Sin descarga y subida no se calcula la calidad global.",err_http:"error del servidor ({c})",err_network:"error de red o acceso bloqueado",err_timeout:"tiempo de espera agotado",err_cancel:"prueba cancelada",err_invalid:"datos no verificables",err_insufficient:"datos insuficientes para una medición fiable"},
+  en:{incomplete:"Diagnosis incomplete",incShort:"Incomplete",incMsg:"Valid results are kept. Overall quality is not calculated without both download and upload.",err_http:"server error ({c})",err_network:"network error or blocked access",err_timeout:"timed out",err_cancel:"test cancelled",err_invalid:"unverifiable data",err_insufficient:"not enough data for a reliable measurement"},
+  fr:{incomplete:"Diagnostic incomplet",incShort:"Incomplet",incMsg:"Les résultats valides sont conservés. La qualité globale n'est pas calculée sans téléchargement et envoi.",err_http:"erreur du serveur ({c})",err_network:"erreur réseau ou accès bloqué",err_timeout:"délai d'attente dépassé",err_cancel:"test annulé",err_invalid:"données non vérifiables",err_insufficient:"données insuffisantes pour une mesure fiable"},
+  de:{incomplete:"Diagnose unvollständig",incShort:"Unvollständig",incMsg:"Gültige Ergebnisse bleiben erhalten. Ohne Download und Upload wird keine Gesamtqualität berechnet.",err_http:"Serverfehler ({c})",err_network:"Netzwerkfehler oder Zugriff blockiert",err_timeout:"Zeitüberschreitung",err_cancel:"Test abgebrochen",err_invalid:"nicht überprüfbare Daten",err_insufficient:"zu wenige Daten für eine zuverlässige Messung"},
+  it:{incomplete:"Diagnosi incompleta",incShort:"Incompleta",incMsg:"I risultati validi vengono conservati. Senza download e upload la qualità complessiva non viene calcolata.",err_http:"errore del server ({c})",err_network:"errore di rete o accesso bloccato",err_timeout:"tempo di attesa scaduto",err_cancel:"test annullato",err_invalid:"dati non verificabili",err_insufficient:"dati insufficienti per una misura affidabile"},
+  pt:{incomplete:"Diagnóstico incompleto",incShort:"Incompleto",incMsg:"Os resultados válidos são mantidos. Sem download e upload não é calculada a qualidade global.",err_http:"erro do servidor ({c})",err_network:"erro de rede ou acesso bloqueado",err_timeout:"tempo de espera esgotado",err_cancel:"teste cancelado",err_invalid:"dados não verificáveis",err_insufficient:"dados insuficientes para uma medição fiável"},
+  nl:{incomplete:"Diagnose onvolledig",incShort:"Onvolledig",incMsg:"Geldige resultaten blijven bewaard. Zonder download en upload wordt geen totale kwaliteit berekend.",err_http:"serverfout ({c})",err_network:"netwerkfout of toegang geblokkeerd",err_timeout:"time-out",err_cancel:"test geannuleerd",err_invalid:"niet-verifieerbare gegevens",err_insufficient:"onvoldoende gegevens voor een betrouwbare meting"},
+  pl:{incomplete:"Diagnoza niepełna",incShort:"Niepełny",incMsg:"Prawidłowe wyniki zostają zachowane. Bez pobierania i wysyłania ogólna jakość nie jest obliczana.",err_http:"błąd serwera ({c})",err_network:"błąd sieci lub zablokowany dostęp",err_timeout:"przekroczono limit czasu",err_cancel:"test anulowany",err_invalid:"dane niemożliwe do weryfikacji",err_insufficient:"za mało danych do wiarygodnego pomiaru"},
+  sv:{incomplete:"Diagnos ofullständig",incShort:"Ofullständig",incMsg:"Giltiga resultat sparas. Utan nedladdning och uppladdning beräknas ingen total kvalitet.",err_http:"serverfel ({c})",err_network:"nätverksfel eller blockerad åtkomst",err_timeout:"tidsgränsen överskreds",err_cancel:"testet avbröts",err_invalid:"data som inte kan verifieras",err_insufficient:"otillräckliga data för en tillförlitlig mätning"},
+  ro:{incomplete:"Diagnostic incomplet",incShort:"Incomplet",incMsg:"Rezultatele valide sunt păstrate. Fără descărcare și încărcare nu se calculează calitatea generală.",err_http:"eroare de server ({c})",err_network:"eroare de rețea sau acces blocat",err_timeout:"timp de așteptare depășit",err_cancel:"test anulat",err_invalid:"date neverificabile",err_insufficient:"date insuficiente pentru o măsurare fiabilă"},
+  el:{incomplete:"Ελλιπής διάγνωση",incShort:"Ελλιπές",incMsg:"Τα έγκυρα αποτελέσματα διατηρούνται. Χωρίς λήψη και αποστολή δεν υπολογίζεται η συνολική ποιότητα.",err_http:"σφάλμα διακομιστή ({c})",err_network:"σφάλμα δικτύου ή αποκλεισμένη πρόσβαση",err_timeout:"λήξη χρόνου αναμονής",err_cancel:"η δοκιμή ακυρώθηκε",err_invalid:"μη επαληθεύσιμα δεδομένα",err_insufficient:"ανεπαρκή δεδομένα για αξιόπιστη μέτρηση"}
+};
+for(const l in TX)Object.assign(T[l],TX[l]);
+const PC={idle:'#7083e6',download:'#3785e8',upload:'#9464df',done:'#10b981'};
 let lang='ca',phase='idle',busy=false;
 
 // ══ QUALITY ══
@@ -577,17 +742,177 @@ const QCOLORS={hi:'#10b981',ok:'#22c55e',fair:'#f59e0b',lo:'#ef4444'};
 function qLevel(dl,ul){
   if(dl===null||dl===undefined)return null;
   const d=parseFloat(dl);if(isNaN(d))return null;
-  const u=parseFloat(ul);const uv=isNaN(u)?0:u;
-  if(d>=300&&uv>=100)return'hi';
-  if(d>=100&&uv>=30)return'ok';
-  if(d>=30&&uv>=10)return'fair';
+  // Sense pujada vàlida no hi ha qualitat global (abans es tractava com a 0 i donava "millorable")
+  const u=parseFloat(ul);if(isNaN(u))return null;
+  if(d>=300&&u>=100)return'hi';
+  if(d>=100&&u>=30)return'ok';
+  if(d>=30&&u>=10)return'fair';
   return'lo';
 }
+// Un registre és complet si ho diu el seu estat (st) o, en dades antigues sense st, si té baixada i pujada.
+function recComplete(r){return r.st?r.st==='ok':(r.dl!=null&&r.ul!=null);}
+const INC_COLOR='#f59e0b';
 function qColor(dl,ul){const l=qLevel(dl,ul);return l?QCOLORS[l]:'#4a5568';}
 function qLabel(dl,ul){const l=qLevel(dl,ul);return l?(T[lang][l]||'—'):'—';}
+function recQColor(r){return recComplete(r)?qColor(r.dl,r.ul):INC_COLOR;}
+function recQLabel(r){return recComplete(r)?qLabel(r.dl,r.ul):(T[lang].incShort||'—');}
 
+const screenCopy={
+  "ca": {
+    "home": "Inici",
+    "test": "Diagnòstic",
+    "past": "Historial",
+    "net": "Xarxa",
+    "isp": "Operador",
+    "ip": "IP pública",
+    "location": "Ubicació",
+    "server": "Servidor de prova",
+    "intro": "Mesura la velocitat de baixada i pujada de la teva xarxa."
+  },
+  "es": {
+    "home": "Inicio",
+    "test": "Diagnóstico",
+    "past": "Historial",
+    "net": "Red",
+    "isp": "Operador",
+    "ip": "IP pública",
+    "location": "Ubicación",
+    "server": "Servidor de prueba",
+    "intro": "Mide la velocidad de descarga y subida de tu red."
+  },
+  "en": {
+    "home": "Home",
+    "test": "Diagnostics",
+    "past": "History",
+    "net": "Network",
+    "isp": "Provider",
+    "ip": "Public IP",
+    "location": "Location",
+    "server": "Test server",
+    "intro": "Measure your network’s download and upload speeds."
+  },
+  "fr": {
+    "home": "Accueil",
+    "test": "Diagnostic",
+    "past": "Historique",
+    "net": "Réseau",
+    "isp": "Opérateur",
+    "ip": "IP publique",
+    "location": "Localisation",
+    "server": "Serveur de test",
+    "intro": "Mesurez les débits descendant et montant de votre réseau."
+  },
+  "de": {
+    "home": "Start",
+    "test": "Diagnose",
+    "past": "Verlauf",
+    "net": "Netzwerk",
+    "isp": "Anbieter",
+    "ip": "Öffentliche IP",
+    "location": "Standort",
+    "server": "Testserver",
+    "intro": "Miss die Download- und Uploadgeschwindigkeit deines Netzwerks."
+  },
+  "it": {
+    "home": "Home",
+    "test": "Diagnostica",
+    "past": "Cronologia",
+    "net": "Rete",
+    "isp": "Operatore",
+    "ip": "IP pubblico",
+    "location": "Posizione",
+    "server": "Server di test",
+    "intro": "Misura la velocità di download e upload della tua rete."
+  },
+  "pt": {
+    "home": "Início",
+    "test": "Diagnóstico",
+    "past": "Histórico",
+    "net": "Rede",
+    "isp": "Operador",
+    "ip": "IP público",
+    "location": "Localização",
+    "server": "Servidor de teste",
+    "intro": "Mede a velocidade de transferência e envio da tua rede."
+  },
+  "nl": {
+    "home": "Start",
+    "test": "Diagnose",
+    "past": "Geschiedenis",
+    "net": "Netwerk",
+    "isp": "Provider",
+    "ip": "Openbaar IP-adres",
+    "location": "Locatie",
+    "server": "Testserver",
+    "intro": "Meet de download- en uploadsnelheid van je netwerk."
+  },
+  "pl": {
+    "home": "Start",
+    "test": "Diagnostyka",
+    "past": "Historia",
+    "net": "Sieć",
+    "isp": "Operator",
+    "ip": "Publiczny adres IP",
+    "location": "Lokalizacja",
+    "server": "Serwer testowy",
+    "intro": "Zmierz prędkość pobierania i wysyłania danych w swojej sieci."
+  },
+  "sv": {
+    "home": "Start",
+    "test": "Diagnostik",
+    "past": "Historik",
+    "net": "Nätverk",
+    "isp": "Operatör",
+    "ip": "Offentlig IP-adress",
+    "location": "Plats",
+    "server": "Testserver",
+    "intro": "Mät nätverkets nedladdnings- och uppladdningshastighet."
+  },
+  "ro": {
+    "home": "Acasă",
+    "test": "Diagnostic",
+    "past": "Istoric",
+    "net": "Rețea",
+    "isp": "Operator",
+    "ip": "IP public",
+    "location": "Locație",
+    "server": "Server de test",
+    "intro": "Măsoară vitezele de descărcare și de încărcare ale rețelei tale."
+  },
+  "el": {
+    "home": "Αρχική",
+    "test": "Διάγνωση",
+    "past": "Ιστορικό",
+    "net": "Δίκτυο",
+    "isp": "Πάροχος",
+    "ip": "Δημόσια IP",
+    "location": "Τοποθεσία",
+    "server": "Διακομιστής δοκιμής",
+    "intro": "Μέτρησε την ταχύτητα λήψης και αποστολής του δικτύου σου."
+  }
+};
+function updateDialLabel(){
+  const t=T[lang];
+  document.getElementById('dial-label').textContent=phase==='upload'?t.ul:
+    (phase==='download'||phase==='done')?t.dl:screenCopy[lang].test;
+}
+function syncRail(){
+  const current=location.hash||'#hero';
+  document.querySelectorAll('.rail-nav a').forEach(a=>{
+    if(a.hash===current)a.setAttribute('aria-current','location');
+    else a.removeAttribute('aria-current');
+  });
+}
+window.addEventListener('hashchange',syncRail);
+syncRail();
 function applyLang(l){
   lang=l;const t=T[l];document.documentElement.lang=l;
+  document.getElementById('hero-tagline').textContent=t.heading;
+  const copy=screenCopy[l];
+  document.querySelectorAll('[data-copy]').forEach(el=>{el.textContent=copy[el.dataset.copy];});
+  document.getElementById('hero-caps').textContent=copy.intro;
+  document.getElementById('quality-empty').textContent=t.idle;
+  updateDialLabel();
   document.getElementById('lang-name').textContent=LANGS[l];
   document.getElementById('lbl-dl').textContent=t.dl;
   document.getElementById('lbl-ul').textContent=t.ul;
@@ -601,6 +926,7 @@ function applyLang(l){
   document.getElementById('conn-title-txt').textContent=t.connTitle;
   document.querySelectorAll('.lang-opt').forEach(b=>b.classList.toggle('active',b.dataset.code===l));
   if(phase==='idle')setStatus(t.idle,idleColor(),false);
+  if(phase==='done')renderOutcome();
   updateBtn();renderHistory();updateHeroBadge();updateConnCard();updateEstimate();
 }
 const ddEl=document.getElementById('lang-dropdown');
@@ -617,7 +943,7 @@ document.getElementById('lang-btn').onclick=e=>{e.stopPropagation();ddEl.classLi
 document.addEventListener('click',()=>{ddEl.classList.remove('open');document.getElementById('chevron').style.transform='';});
 
 // ══ UI ══
-function setStatus(txt,c,pulse){const el=document.getElementById('status');el.textContent=txt;el.style.color=c;el.className=pulse?'pulse':'';}
+function setStatus(txt,c,pulse){updateDialLabel();const el=document.getElementById('status');el.textContent=txt;document.getElementById('quality-empty').textContent=txt;el.style.color=c;el.className=pulse?'pulse':'';}
 function setAmbient(c){document.getElementById('ambient').style.background=`radial-gradient(circle,${c}10 0%,transparent 62%)`;}
 function activatePrimary(n){
   [['dl','download'],['ul','upload']].forEach(([k,cn])=>{
@@ -629,8 +955,8 @@ function activatePrimary(n){
     svg.style.stroke=on?PC[cn]:'currentColor';svg.style.opacity=on?'1':'.35';
   });
 }
-function idleColor(){return document.documentElement.dataset.theme==='day'?'rgba(0,0,0,0.3)':'rgba(255,255,255,0.28)';}
-function placeholderColor(){return document.documentElement.dataset.theme==='day'?'#a0b4c8':'rgba(255,255,255,0.22)';}
+function idleColor(){return 'var(--text-dim)';}
+function placeholderColor(){return 'var(--text-muted)';}
 function setPV(name,val,c){
   const m={download:'val-dl',upload:'val-ul'};
   const el=document.getElementById(m[name]);if(!el)return;
@@ -672,8 +998,8 @@ function renderHistory(){
     const r=h[0];cr.classList.add('show');
     document.getElementById('cr-dl').textContent=r.dl??'—';
     document.getElementById('cr-ul').textContent=r.ul??'—';
-    const qc=qColor(r.dl,r.ul);
-    document.getElementById('cr-quality-badge').textContent=qLabel(r.dl,r.ul);
+    const qc=recQColor(r);
+    document.getElementById('cr-quality-badge').textContent=recQLabel(r);
     document.getElementById('cr-quality-badge').style.color=qc;
     document.getElementById('cr-datetime').textContent=fmtDate(r.ts).replace('\n',' · ');
   }else cr.classList.remove('show');
@@ -682,8 +1008,8 @@ function renderHistory(){
   if(!past.length){empty.style.display='block';return;}
   empty.style.display='none';
   past.forEach((r,i)=>{
-    const qc=qColor(r.dl,r.ul);
-    const ql=qLabel(r.dl,r.ul);
+    const qc=recQColor(r);
+    const ql=recQLabel(r);
     const el=document.createElement('div');el.className='hist-item';
     el.innerHTML=`
       <span class="hist-num">${i+2}</span>
@@ -701,10 +1027,35 @@ function renderHistory(){
 document.getElementById('clear-btn').onclick=()=>{saveH([]);document.getElementById('current-result').classList.remove('show');renderHistory();};
 
 // ══ NETWORK ENGINE ══
+// Criteri de mesura (motor v4) — honest, reproduïble, sense multiplicadors:
+//  · Servidor únic: speed.cloudflare.com (__down / __up). Sense CDN (comprimeixen) ni httpbin (retorna eco).
+//  · Unitats: Mbps = bytes verificats × 8 / segons / 1e6 (bits/ms ÷ 1000).
+//  · BAIXADA: màxim 3 fluxos simultanis amb un únic AbortController. L'escalfament (slow start TCP) es
+//    descarta comptant 1,5 s des del PRIMER BYTE rebut (o fins a 10 MB en connexions molt ràpides).
+//    Mostreig amb rellotge fix cada 250 ms. Resultat = mitjana retallada (descarta el 15% superior i
+//    inferior) amb un mínim de 8 finestres (2 s de mesura real). Els bytes només són vàlids si no superen
+//    el Content-Length declarat pel servidor (si el superen, hi ha compressió/proxy: mesura invalidada).
+//  · PUJADA: màxim 2 peticions simultànies, blocs adaptatius (comença 256 KB; objectiu ~1 s per petició;
+//    entre 64 KB i 8 MB). Un bloc només compta si el servidor respon HTTP 2xx i la resposta acaba.
+//    Es descarta la primera ronda (preflight CORS + slow start). Resultat = bytes confirmats × 8 /
+//    interval que cobreixen, amb un mínim de 3 blocs i 1 s. El bloc en curs al final no compta.
+//  · Sense dades suficients → null + motiu (http:<codi> | network | timeout | cancel | invalid | insufficient).
+//    Mai s'extrapola ni s'inventa un valor.
+//  · Topalls verificables per prova: 10 s per fase, 300 MB rebuts en baixada, 150 MB enviats en pujada.
+const SPEED_BASE='https://speed.cloudflare.com';
+const ENGINE={
+  WIN_MS:250,
+  DL_STREAMS:3,DL_REQ_BYTES:25_000_000,DL_CAP_BYTES:300_000_000,
+  DL_WARMUP_MS:1500,DL_WARMUP_BYTES:10_000_000,DL_MIN_WIN:8,DL_FIRST_BYTE_MS:6000,
+  UL_STREAMS:2,UL_START:256*1024,UL_MIN:64*1024,UL_MAX:8*1024*1024,UL_TARGET_MS:1000,UL_CAP_BYTES:150_000_000,
+  UL_MIN_REQ:3,UL_MIN_SPAN_MS:1000,UL_MAX_FAILS:3,UL_FIRST_TIMEOUT_MS:8000,UL_REQ_TIMEOUT_MIN_MS:3000,
+  SETTLE_MS:2000
+};
+let dlActive=0,ulActive=0; // peticions vives: permet verificar que no queden residus entre fases
+const sleep=ms=>new Promise(r=>setTimeout(r,Math.max(0,ms)));
 function withTO(p,ms){return Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error('t')),ms))]);}
 
-// Mitjana retallada (descarta el 15% superior i inferior) per evitar que un pic puntual
-// o un buit de xarxa manipulin el resultat final. Amb poques mostres, fa mitjana simple.
+// Mitjana retallada: descarta el 15% superior i inferior perquè un pic o un buit puntual no manipulin el resultat.
 function robustAvg(samples){
   if(!samples||!samples.length)return null;
   const sorted=[...samples].sort((a,b)=>a-b);
@@ -714,94 +1065,138 @@ function robustAvg(samples){
   const use=trimmed.length?trimmed:sorted;
   return use.reduce((a,b)=>a+b,0)/use.length;
 }
-
-async function measureDownload(deadline,onLive){
-  const URLS=['https://speed.cloudflare.com/__down?bytes=10000000','https://speed.cloudflare.com/__down?bytes=25000000','https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js','https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'];
-  const testStart=performance.now(),WARMUP=1500;
-  let totalBytes=0,measureStart=null,wBytes=0,wStart=null,idx=0;
-  const samples=[];
-  const ctrl=new AbortController();
-  const cancelTimer=setTimeout(()=>ctrl.abort(),Math.max(500,deadline-performance.now()+400));
-  async function stream(url){
-    try{
-      const r=await withTO(fetch(url,{cache:'no-store',signal:ctrl.signal}),Math.max(1000,Math.min(deadline-performance.now()+500,18000)));
-      if(!r.ok)return;
-      if(r.body?.getReader){
-        const rdr=r.body.getReader();
-        while(true){
-          if(performance.now()>=deadline){try{rdr.cancel();}catch{}break;}
-          const{done,value}=await rdr.read();if(done)break;
-          const now=performance.now();
-          if(now-testStart>WARMUP){
-            if(measureStart===null)measureStart=now;
-            if(wStart===null)wStart=now;
-            totalBytes+=value.length;wBytes+=value.length;
-            const dt=(now-wStart)/1000;
-            if(dt>=0.2){
-              const mbps=wBytes*8/dt/1e6;
-              samples.push(mbps);onLive(mbps);
-              wBytes=0;wStart=now;
-            }
-          }
-        }
-      }else{
-        const buf=await r.arrayBuffer();
-        if(performance.now()-testStart>WARMUP){if(measureStart===null)measureStart=performance.now();totalBytes+=buf.byteLength;}
-      }
-    }catch{}
-  }
-  const p1=stream(URLS[0]);
-  await new Promise(r=>setTimeout(r,200));
-  const p2=stream(URLS[1]);
-  while(performance.now()<deadline-600){await new Promise(r=>setTimeout(r,400));if(performance.now()<deadline-600)stream(URLS[(++idx)%URLS.length]);}
-  await Promise.race([Promise.allSettled([p1,p2]),new Promise(r=>setTimeout(r,Math.max(400,deadline-performance.now()+400)))]);
-  clearTimeout(cancelTimer);
-  const robust=robustAvg(samples);
-  if(robust!==null)return+robust.toFixed(2);
-  if(measureStart!==null&&totalBytes>0){
-    const dt=(performance.now()-measureStart)/1000;
-    if(dt>0.5)return+(totalBytes*8/dt/1e6).toFixed(2);
-  }
-  return null;
+// Motiu més informatiu d'una fase fallida. Nota: des de JavaScript un error de CORS i un de xarxa
+// són indistingibles (tots dos són TypeError), per això comparteixen el codi 'network'.
+function pickReason(errors){
+  const h=errors.find(e=>e.startsWith('http:'));if(h)return h;
+  if(errors.includes('invalid'))return'invalid';
+  if(errors.includes('timeout'))return'timeout';
+  if(errors.includes('network'))return'network';
+  return'insufficient';
 }
 
-async function measureUpload(deadline,onLive){
-  const URLS=['https://speed.cloudflare.com/__up','https://httpbin.org/post'];
-  const MAX_CHUNK=8_000_000;
-  let chunk=1_000_000,total=0,start=performance.now(),fails=0,idx=0;
-  const samples=[];
-  const ctrl=new AbortController();
-  const masterTimer=setTimeout(()=>ctrl.abort(),Math.max(500,deadline-performance.now()+300));
-  while(performance.now()<deadline-400){
-    const remaining=deadline-performance.now();
-    if(remaining<400)break;
-    const data=new Uint8Array(chunk);
-    const t0=performance.now();
-    try{
-      await fetch(URLS[idx%URLS.length],{method:'POST',body:data.buffer,signal:ctrl.signal,headers:{'Content-Type':'application/octet-stream'}});
-      const dtChunk=(performance.now()-t0)/1000;
-      total+=chunk;fails=0;idx=0;
-      if(dtChunk>0.05)samples.push(chunk*8/dtChunk/1e6);
-      const dt=(performance.now()-start)/1000;
-      if(dt>0){
-        const avgMbps=total*8/dt/1e6;
-        onLive(avgMbps);
-        // connexió ràpida: augmenta la mida de mostra per saturar millor el canal
-        if(avgMbps>50&&chunk<MAX_CHUNK)chunk=Math.min(chunk*2,MAX_CHUNK);
-      }
-    }catch(e){
-      if(ctrl.signal.aborted)break;
-      if(++fails>=4)break;
-      idx++;
-      await new Promise(r=>setTimeout(r,300));
+async function measureDownload(deadline,onLive,outer){
+  const E=ENGINE,ctl=new AbortController(),errors=[],samples=[];
+  if(outer.aborted)return{mbps:null,reason:'cancel',bytes:0,samples:0,errors,leftover:dlActive};
+  const onOuter=()=>ctl.abort();
+  outer.addEventListener('abort',onOuter);
+  const tStart=performance.now();
+  let bytes=0,firstByteAt=null,warmEnd=null,winStart=null,winBytes0=0,stop=false;
+  const finished=()=>stop||ctl.signal.aborted||performance.now()>=deadline||bytes>=E.DL_CAP_BYTES;
+  async function worker(){
+    while(!finished()){
+      dlActive++;
+      try{
+        const r=await fetch(SPEED_BASE+'/__down?bytes='+E.DL_REQ_BYTES,{cache:'no-store',signal:ctl.signal});
+        if(!r.ok){errors.push('http:'+r.status);try{await r.body?.cancel();}catch{}return;}
+        if(!r.body||!r.body.getReader){errors.push('invalid');return;}
+        const declared=parseInt(r.headers.get('content-length')||'',10);
+        const rdr=r.body.getReader();let got=0;
+        try{
+          while(true){
+            const{done,value}=await rdr.read();
+            if(done)break;
+            got+=value.byteLength;
+            // Cos més gran que el Content-Length declarat = bytes descomprimits, no bytes de xarxa.
+            if(Number.isFinite(declared)&&got>declared){errors.push('invalid');stop=true;break;}
+            const now=performance.now();
+            if(firstByteAt===null){firstByteAt=now;warmEnd=now+E.DL_WARMUP_MS;}
+            bytes+=value.byteLength;
+            if(now<warmEnd&&bytes>=E.DL_WARMUP_BYTES)warmEnd=now; // connexió molt ràpida: slow start superat
+            if(finished())break;
+          }
+        }finally{try{await rdr.cancel();}catch{}}
+      }catch(e){
+        if(!ctl.signal.aborted){errors.push('network');return;}
+      }finally{dlActive--;}
     }
   }
-  clearTimeout(masterTimer);
-  const dt=(performance.now()-start)/1000;
-  if(total<=0||dt<=0.5)return null;
-  const robust=robustAvg(samples);
-  return robust!==null?+robust.toFixed(2):+(total*8/dt/1e6).toFixed(2);
+  const sampler=setInterval(()=>{
+    const now=performance.now();
+    if(firstByteAt===null){
+      if(now-tStart>E.DL_FIRST_BYTE_MS&&!ctl.signal.aborted){errors.push('timeout');ctl.abort();}
+      return;
+    }
+    if(now<warmEnd){onLive(bytes*8/Math.max(1,now-firstByteAt)/1000);return;}
+    if(winStart===null){winStart=now;winBytes0=bytes;return;}
+    const dt=now-winStart;if(dt<E.WIN_MS/2)return;
+    const mbps=(bytes-winBytes0)*8/dt/1000;
+    samples.push(mbps);winStart=now;winBytes0=bytes;
+    onLive(mbps);
+  },E.WIN_MS);
+  const workers=[];
+  for(let i=0;i<E.DL_STREAMS;i++){workers.push(worker());if(i<E.DL_STREAMS-1)await sleep(150);}
+  const all=Promise.allSettled(workers);
+  await Promise.race([all,sleep(deadline-performance.now())]);
+  stop=true;ctl.abort();clearInterval(sampler);
+  await Promise.race([all,sleep(E.SETTLE_MS)]); // allibera connexions abans de retornar
+  outer.removeEventListener('abort',onOuter);
+  let mbps=null,reason=null;
+  if(outer.aborted)reason='cancel';
+  else if(errors.includes('invalid'))reason='invalid';
+  else if(samples.length>=E.DL_MIN_WIN)mbps=+robustAvg(samples).toFixed(2);
+  else reason=pickReason(errors);
+  return{mbps,reason,bytes,samples:samples.length,errors,leftover:dlActive};
 }
+
+async function measureUpload(deadline,onLive,outer){
+  const E=ENGINE,phase=new AbortController(),live=new Set(),errors=[],done=[];
+  if(outer.aborted)return{mbps:null,reason:'cancel',bytesSent:0,blocks:0,measured:0,errors,leftover:ulActive};
+  const onOuter=()=>{phase.abort();live.forEach(c=>c.abort());};
+  outer.addEventListener('abort',onOuter);
+  let size=E.UL_START,sent=0,fails=0,stop=false,firstDoneAt=null,lastReqRate=null;
+  function confirmed(onlyMeasured){
+    const set=onlyMeasured?done.filter(d=>d.t0>=firstDoneAt):done;
+    let b=0,a=Infinity,z=0;
+    for(const d of set){b+=d.b;if(d.t0<a)a=d.t0;if(d.t1>z)z=d.t1;}
+    return{b,span:set.length?z-a:0,n:set.length};
+  }
+  async function worker(){
+    while(!stop&&!phase.signal.aborted){
+      const remaining=deadline-performance.now();
+      let n=size;
+      if(lastReqRate!==null)n=Math.min(n,Math.floor(lastReqRate*remaining*0.8)); // ha d'acabar abans del final
+      if(remaining<300||n<E.UL_MIN||sent+n>E.UL_CAP_BYTES)return;
+      const c=new AbortController();live.add(c);
+      let timedOut=false;
+      const expectedMs=lastReqRate?n/lastReqRate:null;
+      const tm=setTimeout(()=>{timedOut=true;c.abort();},
+        expectedMs?Math.max(E.UL_REQ_TIMEOUT_MIN_MS,expectedMs*4):E.UL_FIRST_TIMEOUT_MS);
+      const body=new Uint8Array(n);
+      const t0=performance.now();sent+=n;ulActive++;
+      try{
+        const r=await fetch(SPEED_BASE+'/__up',{method:'POST',body,signal:c.signal,cache:'no-store',headers:{'Content-Type':'application/octet-stream'}});
+        await r.arrayBuffer(); // la transferència només és completa quan la resposta acaba
+        const t1=performance.now();
+        if(!r.ok){errors.push('http:'+r.status);if(++fails>=E.UL_MAX_FAILS)stop=true;else await sleep(300);continue;}
+        fails=0;done.push({t0,t1,b:n});
+        if(firstDoneAt===null)firstDoneAt=t1;
+        lastReqRate=n/Math.max(1,t1-t0); // bytes/ms d'aquesta petició
+        // creix com a màxim ×2 per pas; baixa fins a ÷4 per adaptar-se de pressa a enllaços lents
+        size=Math.round(Math.min(E.UL_MAX,Math.max(E.UL_MIN,Math.min(size*2,Math.max(size/4,lastReqRate*E.UL_TARGET_MS)))));
+        const all=confirmed(false);if(all.span>0)onLive(all.b*8/all.span/1000);
+      }catch(e){
+        if(phase.signal.aborted&&!timedOut)return; // final de fase o cancel·lació: el bloc en curs no compta
+        errors.push(timedOut?'timeout':'network');
+        if(++fails>=E.UL_MAX_FAILS)stop=true;else await sleep(300);
+      }finally{clearTimeout(tm);live.delete(c);ulActive--;}
+    }
+  }
+  const workers=[];
+  for(let i=0;i<E.UL_STREAMS;i++){workers.push(worker());if(i<E.UL_STREAMS-1)await sleep(100);}
+  const all=Promise.allSettled(workers);
+  await Promise.race([all,sleep(deadline-performance.now())]);
+  stop=true;phase.abort();live.forEach(c=>c.abort());
+  await Promise.race([all,sleep(E.SETTLE_MS)]);
+  outer.removeEventListener('abort',onOuter);
+  const m=firstDoneAt===null?{b:0,span:0,n:0}:confirmed(true);
+  let mbps=null,reason=null;
+  if(outer.aborted)reason='cancel';
+  else if(m.n>=E.UL_MIN_REQ&&m.span>=E.UL_MIN_SPAN_MS)mbps=+(m.b*8/m.span/1000).toFixed(2);
+  else reason=pickReason(errors);
+  return{mbps,reason,bytesSent:sent,blocks:done.length,measured:m.n,errors,leftover:ulActive};
+}
+// ══ END NETWORK ENGINE ══
 
 // ══ CONNECTION DETECTION ══
 // Informativa, independent del test: mai bloqueja ni fa fallar el diagnòstic.
@@ -850,8 +1245,9 @@ function updateConnCard(){
   else{txt.textContent=t.connUnavailable;}
   document.getElementById('conn-isp').textContent=connState.isp||t.connUnavailable;
   const server='Cloudflare ('+(connState.colo||t.connAuto)+')';
-  const meta=[connState.ip,connState.city,server].filter(Boolean);
-  document.getElementById('conn-meta').textContent=meta.join(' · ');
+  document.getElementById('conn-ip').textContent=connState.ip||'—';
+  document.getElementById('conn-city').textContent=connState.city||'—';
+  document.getElementById('conn-server').textContent=server;
 }
 
 // ══ PROGRESS STEPS ══
@@ -882,22 +1278,63 @@ function updateEstimate(){
 // ══ RUNNER ══
 const DUR=10000;
 let lastResult={dl:null,ul:null};
-const BTN_STYLE={
-  night:{bg:'linear-gradient(135deg,#c9a84c,#7a5010)',color:'#07080f'},
-  dawn:{bg:'linear-gradient(135deg,#4dd0e1,#006976)',color:'#0a1628'},
-  day:{bg:'linear-gradient(135deg,#1e2d42,#2d3f56)',color:'#f0f4fa'},
-  golden:{bg:'linear-gradient(135deg,#e8c96a,#c9a84c)',color:'#0d1524'},
-  dusk:{bg:'linear-gradient(135deg,#c084fc,#7c3aed)',color:'#0f0a1a'}
-};
 function resetBtn(){
-  const t=document.documentElement.dataset.theme||'night';
-  const s=BTN_STYLE[t]||BTN_STYLE.night;
   const btn=document.getElementById('start-btn');
-  btn.style.background=s.bg;btn.style.color=s.color;btn.style.boxShadow='';
+  btn.style.background='';btn.style.color='';btn.style.boxShadow='';
 }
+
+// Text del motiu d'error en l'idioma actiu
+function reasonText(code){
+  const t=T[lang];
+  if(!code)return'';
+  if(code.startsWith('http:'))return(t.err_http||'HTTP {c}').replace('{c}',code.slice(5));
+  return t['err_'+code]||t.err_insufficient;
+}
+// Estat final (completat / incomplet), qualitat i avisos. Es torna a pintar si es canvia d'idioma.
+let lastOutcome=null;
+function renderOutcome(){
+  if(!lastOutcome)return;
+  const t=T[lang],o=lastOutcome,wb=document.getElementById('warn-box');
+  if(o.complete){
+    setStatus(t.done+' ✓',PC.done,false);
+    wb.classList.remove('show');
+  }else{
+    setStatus(t.incomplete,'#f59e0b',false);
+    const parts=[];
+    if(o.dlReason)parts.push(t.dl+': '+reasonText(o.dlReason));
+    if(o.ulReason)parts.push(t.ul+': '+reasonText(o.ulReason));
+    document.getElementById('wt').textContent=t.incomplete;
+    document.getElementById('wm').textContent=parts.join(' · ')+'. '+t.incMsg;
+    wb.classList.add('show');
+  }
+  // Qualitat global NOMÉS amb baixada i pujada vàlides
+  const qEl=document.getElementById('quality');
+  const lev=o.complete?qLevel(o.dl,o.ul):null;
+  if(lev){
+    const qc=QCOLORS[lev];
+    const qdot=document.getElementById('quality-dot');
+    qdot.style.background=qc;qdot.style.boxShadow=`0 0 10px ${qc}`;
+    document.getElementById('quality-sublabel').textContent=t.quality;
+    const qtxt=document.getElementById('quality-text');
+    qtxt.textContent=t['qm_'+lev]||t[lev]||'—';qtxt.style.color=qc;
+    qEl.classList.add('show');
+  }else qEl.classList.remove('show');
+  const disc=document.getElementById('disclaimer');
+  if(o.dl!==null||o.ul!==null){disc.textContent=t.advisory;disc.classList.add('show');}
+  else disc.classList.remove('show');
+}
+
+// Cancel·lació: si la pàgina passa a segon pla, el navegador ralenteix temporitzadors i xarxa
+// i la mesura deixaria de ser fiable. Es cancel·la i es marca com a incompleta.
+let testCtl=null;
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&busy&&testCtl&&!testCtl.signal.aborted)testCtl.abort();
+});
 
 async function runTest(){
   if(busy)return;busy=true;
+  testCtl=new AbortController();const sig=testCtl.signal;
+  lastOutcome=null;
   ['download','upload'].forEach(n=>setPV(n,'—'));
   document.getElementById('quality').classList.remove('show');
   document.getElementById('disclaimer').classList.remove('show');
@@ -911,7 +1348,7 @@ async function runTest(){
   phase='prep';setProgressStep('prep');
   setAmbient(PC.idle);activatePrimary('');showSpinner(true,PC.idle);resetBtn();
   setStatus(T[lang].prep,idleColor(),true);
-  await new Promise(r=>setTimeout(r,PREP_MS));
+  await sleep(PREP_MS);
 
   // DOWNLOAD
   phase='download';setProgressStep('download');const cd=PC.download;
@@ -919,58 +1356,58 @@ async function runTest(){
   document.getElementById('start-btn').style.background=`linear-gradient(135deg,${cd}dd,${cd}88)`;
   document.getElementById('start-btn').style.color='#07080f';
   setStatus(T[lang].pd,cd,true);startTimer(cd,DUR);
-  const dlDeadline=performance.now()+DUR;
-  const dlResult=await measureDownload(dlDeadline,(mbps)=>{
+  const dl=await measureDownload(performance.now()+DUR,(mbps)=>{
     setTarget(mbps,cd);
     const el=document.getElementById('val-dl');el.textContent=mbps<10?mbps.toFixed(1):Math.round(mbps).toString();el.style.color='rgba(0,212,255,0.5)';
-  });
-  setPV('download',dlResult!==null?fmtSpd(dlResult):'N/A',dlResult!==null?cd:'#4a5568');
-  lastResult.dl=dlResult!==null?fmtSpd(dlResult):null;
-  setTarget(0,cd);await new Promise(r=>setTimeout(r,450));stopTimer();
+  },sig);
+  console.info('[SH Pulse] baixada',dl);
+  setPV('download',dl.mbps!==null?fmtSpd(dl.mbps):'N/A',dl.mbps!==null?cd:'#4a5568');
+  setTarget(0,cd);await sleep(450);stopTimer();
+  // La pujada no comença fins que no queda cap petició de baixada viva
+  for(let i=0;i<20&&dlActive>0;i++)await sleep(100);
+  if(dlActive>0)console.warn('[SH Pulse] peticions de baixada encara actives en iniciar la pujada:',dlActive);
 
   // UPLOAD
-  phase='upload';setProgressStep('upload');const cu=PC.upload;
-  setAmbient(cu);activatePrimary('upload');showSpinner(true,cu);setDot('upload');
-  document.getElementById('start-btn').style.background=`linear-gradient(135deg,${cu}dd,${cu}88)`;
-  setStatus(T[lang].pu,cu,true);startTimer(cu,DUR);
-  const ulDeadline=performance.now()+DUR;
-  const ulResult=await measureUpload(ulDeadline,(mbps)=>{
-    setTarget(mbps,cu);
-    const el=document.getElementById('val-ul');el.textContent=mbps<10?mbps.toFixed(1):Math.round(mbps).toString();el.style.color='rgba(168,85,247,0.5)';
-  });
-  if(ulResult!==null){setPV('upload',fmtSpd(ulResult));}
-  else{setPV('upload','N/A','#4a5568');document.getElementById('unit-ul').textContent='';document.getElementById('wt').textContent=T[lang].ulwarn;document.getElementById('wm').textContent=T[lang].ulwarnmsg;document.getElementById('warn-box').classList.add('show');}
-  lastResult.ul=ulResult!==null?fmtSpd(ulResult):null;
-  setTarget(0,cu);await new Promise(r=>setTimeout(r,450));stopTimer();
+  let ul;
+  if(sig.aborted){ul={mbps:null,reason:'cancel'};}
+  else{
+    phase='upload';setProgressStep('upload');const cu=PC.upload;
+    setAmbient(cu);activatePrimary('upload');showSpinner(true,cu);setDot('upload');
+    document.getElementById('start-btn').style.background=`linear-gradient(135deg,${cu}dd,${cu}88)`;
+    setStatus(T[lang].pu,cu,true);startTimer(cu,DUR);
+    ul=await measureUpload(performance.now()+DUR,(mbps)=>{
+      setTarget(mbps,cu);
+      const el=document.getElementById('val-ul');el.textContent=mbps<10?mbps.toFixed(1):Math.round(mbps).toString();el.style.color='rgba(168,85,247,0.5)';
+    },sig);
+    console.info('[SH Pulse] pujada',ul);
+    setTarget(0,cu);await sleep(450);stopTimer();
+  }
+  if(ul.mbps!==null)setPV('upload',fmtSpd(ul.mbps));
+  else{setPV('upload','N/A','#4a5568');document.getElementById('unit-ul').textContent='';}
 
   // ANALYZE
   phase='analyze';setProgressStep('analyze');const cA=PC.done;
   setAmbient(cA);activatePrimary('');showSpinner(true,cA);
   document.getElementById('start-btn').style.background=`linear-gradient(135deg,${cA}dd,${cA}88)`;
   setStatus(T[lang].analyze,cA,true);
-  await new Promise(r=>setTimeout(r,ANALYZE_MS));
+  await sleep(ANALYZE_MS);
 
-  // DONE
-  phase='done';setProgressStep('done');const cD=PC.done;
-  setAmbient(cD);activatePrimary('');showSpinner(false,cD);resetBtn();
-  setStatus(T[lang].done+' ✓',cD,false);
-  if(dlResult!==null){
-    const lev=qLevel(lastResult.dl,lastResult.ul);
-    const qc=QCOLORS[lev]||'#4a5568';
-    const qdot=document.getElementById('quality-dot');
-    qdot.style.background=qc;
-    qdot.style.boxShadow=`0 0 10px ${qc}`;
-    document.getElementById('quality-sublabel').textContent=T[lang].quality;
-    const qtxt=document.getElementById('quality-text');
-    qtxt.textContent=T[lang]['qm_'+lev]||T[lang][lev]||'—';
-    qtxt.style.color=qc;
-    document.getElementById('quality').classList.add('show');
-    const disc=document.getElementById('disclaimer');
-    disc.textContent=T[lang].advisory;
-    disc.classList.add('show');
-  }
+  // DONE — completat només si les dues mesures són vàlides
+  const complete=dl.mbps!==null&&ul.mbps!==null;
+  lastResult={dl:dl.mbps!==null?fmtSpd(dl.mbps):null,ul:ul.mbps!==null?fmtSpd(ul.mbps):null,st:complete?'ok':'inc'};
+  lastOutcome={complete,dl:lastResult.dl,ul:lastResult.ul,
+    dlReason:dl.mbps===null?(dl.reason||'insufficient'):null,
+    ulReason:ul.mbps===null?(ul.reason||'insufficient'):null};
+  phase='done';setProgressStep('done');
+  // Fases fallides marcades en ambre a la barra de progrés (no tot verd si el diagnòstic és incomplet)
+  if(dl.mbps===null)document.getElementById('pstep-download').style.background='#f59e0b';
+  if(ul.mbps===null)document.getElementById('pstep-upload').style.background='#f59e0b';
+  setAmbient(complete?PC.done:'#f59e0b');activatePrimary('');showSpinner(false,PC.done);resetBtn();
+  // Gauge central: velocitat final de baixada (valor mesurat); sense mesura vàlida, estat neutre "—"
+  if(dl.mbps!==null)setTarget(dl.mbps,PC.download,true);else setTarget(0,'#c9a84c');
+  renderOutcome();
   addR(lastResult);renderHistory();
-  updateBtn();busy=false;updateEstimate();
+  updateBtn();busy=false;testCtl=null;updateEstimate();
 }
 
 // ══ TIME THEME (5 franges) ══
